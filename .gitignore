@@ -1,3 +1,7 @@
 /.agents
 /.codex
 /.venv
+
+# Large/non-code presentation artifacts
+/artifacts/presentations/
+artifacts/presentations/
