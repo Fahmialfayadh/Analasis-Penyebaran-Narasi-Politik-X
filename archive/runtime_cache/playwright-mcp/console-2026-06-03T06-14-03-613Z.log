@@ -1,0 +1,3 @@
+[    1382ms] [INFO] This network could not be positioned by this version of the improved layout algorithm. Please disable improvedLayout for better performance. @ https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js:25
+[    4416ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://127.0.0.1:8000/favicon.ico:0
+[    5723ms] [LOG] Physics frozen. @ http://127.0.0.1:8000/data/DE-sample-X-capres2024/DE-sample-X-capres2024/visualisasi_st.html:458

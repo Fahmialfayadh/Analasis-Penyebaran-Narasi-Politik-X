@@ -1,0 +1,6 @@
+pyvis
+sentence-transformers
+networkx
+pandas
+numpy
+scikit-learn

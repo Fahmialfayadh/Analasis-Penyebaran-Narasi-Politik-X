@@ -1,0 +1,277 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Analisis Koordinasi Narasi Politik" [level=5] [ref=e5]
+      - generic [ref=e6]: Laporan Koordinasi
+    - generic [ref=e7]: Visualisasi Kluster Twitter/X
+  - generic [ref=e8]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: Fokus Narasi
+      - generic [ref=e15]: Membahas Anies-Muhaimin
+      - generic [ref=e17]: Membahas Prabowo-Gibran
+      - generic [ref=e19]: Membahas Ganjar-Mahfud
+      - generic [ref=e21]: Lintas kandidat
+      - generic [ref=e23]: Tanpa kandidat dominan
+      - generic [ref=e25]: Warna menunjukkan objek pembahasan, bukan dukungan atau oposisi.
+    - generic [ref=e26]:
+      - tablist [ref=e27]:
+        - tab "Ikhtisar" [selected] [ref=e28] [cursor=pointer]
+        - tab "Analisis Detil" [ref=e29] [cursor=pointer]
+        - tab "Kluster" [ref=e30] [cursor=pointer]
+      - tabpanel "Ikhtisar" [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - generic [ref=e35]: Total Akun Terdeteksi
+            - generic [ref=e36]: "385"
+          - generic [ref=e37]:
+            - generic [ref=e38]: Hubungan Interaksi
+            - generic [ref=e39]: "1996"
+          - generic [ref=e40]:
+            - generic [ref=e41]: Jumlah Kelompok
+            - generic [ref=e42]: "39"
+          - generic [ref=e43]:
+            - generic [ref=e44]: Kluster Koordinasi Kuat
+            - generic [ref=e45]: "24"
+        - heading "Peringkat Koordinasi Kluster" [level=6] [ref=e46]
+        - table [ref=e47]:
+          - rowgroup [ref=e48]:
+            - row "Kluster Ukuran (Akun) Skor Fokus Narasi" [ref=e49]:
+              - columnheader "Kluster" [ref=e50]
+              - columnheader "Ukuran (Akun)" [ref=e51]
+              - columnheader "Skor" [ref=e52]
+              - columnheader "Fokus Narasi" [ref=e53]
+          - rowgroup [ref=e54]:
+            - row "#3 45 1.8635 Dominan membahas Ganjar-Mahfud" [ref=e55]:
+              - cell "#3" [ref=e56] [cursor=pointer]
+              - cell "45" [ref=e57] [cursor=pointer]
+              - cell "1.8635" [ref=e58] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e59] [cursor=pointer]:
+                - generic [ref=e60]: Dominan membahas Ganjar-Mahfud
+            - row "#28 21 4.4594 Dominan membahas Ganjar-Mahfud" [ref=e61]:
+              - cell "#28" [ref=e62] [cursor=pointer]
+              - cell "21" [ref=e63] [cursor=pointer]
+              - cell "4.4594" [ref=e64] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e65] [cursor=pointer]:
+                - generic [ref=e66]: Dominan membahas Ganjar-Mahfud
+            - row "#1 11 3.585 Dominan membahas Prabowo-Gibran" [ref=e67]:
+              - cell "#1" [ref=e68] [cursor=pointer]
+              - cell "11" [ref=e69] [cursor=pointer]
+              - cell "3.585" [ref=e70] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e71] [cursor=pointer]:
+                - generic [ref=e72]: Dominan membahas Prabowo-Gibran
+            - row "#26 18 4.0536 Dominan membahas Ganjar-Mahfud" [ref=e73]:
+              - cell "#26" [ref=e74] [cursor=pointer]
+              - cell "18" [ref=e75] [cursor=pointer]
+              - cell "4.0536" [ref=e76] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e77] [cursor=pointer]:
+                - generic [ref=e78]: Dominan membahas Ganjar-Mahfud
+            - row "#19 13 3.8074 Dominan membahas Ganjar-Mahfud" [ref=e79]:
+              - cell "#19" [ref=e80] [cursor=pointer]
+              - cell "13" [ref=e81] [cursor=pointer]
+              - cell "3.8074" [ref=e82] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e83] [cursor=pointer]:
+                - generic [ref=e84]: Dominan membahas Ganjar-Mahfud
+            - row "#17 15 2.6286 Dominan membahas Ganjar-Mahfud" [ref=e85]:
+              - cell "#17" [ref=e86] [cursor=pointer]
+              - cell "15" [ref=e87] [cursor=pointer]
+              - cell "2.6286" [ref=e88] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e89] [cursor=pointer]:
+                - generic [ref=e90]: Dominan membahas Ganjar-Mahfud
+            - row "#2 12 2.0184 Dominan membahas Anies-Muhaimin" [ref=e91]:
+              - cell "#2" [ref=e92] [cursor=pointer]
+              - cell "12" [ref=e93] [cursor=pointer]
+              - cell "2.0184" [ref=e94] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e95] [cursor=pointer]:
+                - generic [ref=e96]: Dominan membahas Anies-Muhaimin
+            - row "#13 10 3.4594 Dominan membahas Ganjar-Mahfud" [ref=e97]:
+              - cell "#13" [ref=e98] [cursor=pointer]
+              - cell "10" [ref=e99] [cursor=pointer]
+              - cell "3.4594" [ref=e100] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e101] [cursor=pointer]:
+                - generic [ref=e102]: Dominan membahas Ganjar-Mahfud
+            - row "#21 10 3.4594 Dominan membahas Ganjar-Mahfud" [ref=e103]:
+              - cell "#21" [ref=e104] [cursor=pointer]
+              - cell "10" [ref=e105] [cursor=pointer]
+              - cell "3.4594" [ref=e106] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e107] [cursor=pointer]:
+                - generic [ref=e108]: Dominan membahas Ganjar-Mahfud
+            - row "#52 10 3.4594 Dominan membahas Ganjar-Mahfud" [ref=e109]:
+              - cell "#52" [ref=e110] [cursor=pointer]
+              - cell "10" [ref=e111] [cursor=pointer]
+              - cell "3.4594" [ref=e112] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e113] [cursor=pointer]:
+                - generic [ref=e114]: Dominan membahas Ganjar-Mahfud
+            - row "#12 8 3.1699 Dominan membahas Ganjar-Mahfud" [ref=e115]:
+              - cell "#12" [ref=e116] [cursor=pointer]
+              - cell "8" [ref=e117] [cursor=pointer]
+              - cell "3.1699" [ref=e118] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e119] [cursor=pointer]:
+                - generic [ref=e120]: Dominan membahas Ganjar-Mahfud
+            - row "#10 7 3 Dominan membahas Ganjar-Mahfud" [ref=e121]:
+              - cell "#10" [ref=e122] [cursor=pointer]
+              - cell "7" [ref=e123] [cursor=pointer]
+              - cell "3" [ref=e124] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e125] [cursor=pointer]:
+                - generic [ref=e126]: Dominan membahas Ganjar-Mahfud
+            - row "#25 9 1.8455 Dominan membahas Ganjar-Mahfud" [ref=e127]:
+              - cell "#25" [ref=e128] [cursor=pointer]
+              - cell "9" [ref=e129] [cursor=pointer]
+              - cell "1.8455" [ref=e130] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e131] [cursor=pointer]:
+                - generic [ref=e132]: Dominan membahas Ganjar-Mahfud
+            - row "#39 9 1.5687 Dominan membahas Anies-Muhaimin" [ref=e133]:
+              - cell "#39" [ref=e134] [cursor=pointer]
+              - cell "9" [ref=e135] [cursor=pointer]
+              - cell "1.5687" [ref=e136] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e137] [cursor=pointer]:
+                - generic [ref=e138]: Dominan membahas Anies-Muhaimin
+            - row "#14 6 2.8074 Dominan membahas Ganjar-Mahfud" [ref=e139]:
+              - cell "#14" [ref=e140] [cursor=pointer]
+              - cell "6" [ref=e141] [cursor=pointer]
+              - cell "2.8074" [ref=e142] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e143] [cursor=pointer]:
+                - generic [ref=e144]: Dominan membahas Ganjar-Mahfud
+            - row "#32 6 2.8074 Dominan membahas Anies-Muhaimin" [ref=e145]:
+              - cell "#32" [ref=e146] [cursor=pointer]
+              - cell "6" [ref=e147] [cursor=pointer]
+              - cell "2.8074" [ref=e148] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e149] [cursor=pointer]:
+                - generic [ref=e150]: Dominan membahas Anies-Muhaimin
+            - row "#45 6 2.8074 Dominan membahas Prabowo-Gibran" [ref=e151]:
+              - cell "#45" [ref=e152] [cursor=pointer]
+              - cell "6" [ref=e153] [cursor=pointer]
+              - cell "2.8074" [ref=e154] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e155] [cursor=pointer]:
+                - generic [ref=e156]: Dominan membahas Prabowo-Gibran
+            - row "#11 5 2.585 Dominan membahas Ganjar-Mahfud" [ref=e157]:
+              - cell "#11" [ref=e158] [cursor=pointer]
+              - cell "5" [ref=e159] [cursor=pointer]
+              - cell "2.585" [ref=e160] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e161] [cursor=pointer]:
+                - generic [ref=e162]: Dominan membahas Ganjar-Mahfud
+            - row "#18 5 2.585 Dominan membahas Ganjar-Mahfud" [ref=e163]:
+              - cell "#18" [ref=e164] [cursor=pointer]
+              - cell "5" [ref=e165] [cursor=pointer]
+              - cell "2.585" [ref=e166] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]: Dominan membahas Ganjar-Mahfud
+            - row "#20 5 2.585 Dominan membahas Ganjar-Mahfud" [ref=e169]:
+              - cell "#20" [ref=e170] [cursor=pointer]
+              - cell "5" [ref=e171] [cursor=pointer]
+              - cell "2.585" [ref=e172] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e173] [cursor=pointer]:
+                - generic [ref=e174]: Dominan membahas Ganjar-Mahfud
+            - row "#48 5 1.8095 Dominan membahas Ganjar-Mahfud" [ref=e175]:
+              - cell "#48" [ref=e176] [cursor=pointer]
+              - cell "5" [ref=e177] [cursor=pointer]
+              - cell "1.8095" [ref=e178] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e179] [cursor=pointer]:
+                - generic [ref=e180]: Dominan membahas Ganjar-Mahfud
+            - row "#33 6 1.6844 Dominan membahas Anies-Muhaimin" [ref=e181]:
+              - cell "#33" [ref=e182] [cursor=pointer]
+              - cell "6" [ref=e183] [cursor=pointer]
+              - cell "1.6844" [ref=e184] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e185] [cursor=pointer]:
+                - generic [ref=e186]: Dominan membahas Anies-Muhaimin
+            - row "#31 5 1.8095 Dominan membahas Ganjar-Mahfud" [ref=e187]:
+              - cell "#31" [ref=e188] [cursor=pointer]
+              - cell "5" [ref=e189] [cursor=pointer]
+              - cell "1.8095" [ref=e190] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e191] [cursor=pointer]:
+                - generic [ref=e192]: Dominan membahas Ganjar-Mahfud
+            - row "#34 5 1.551 Dominan membahas Prabowo-Gibran" [ref=e193]:
+              - cell "#34" [ref=e194] [cursor=pointer]
+              - cell "5" [ref=e195] [cursor=pointer]
+              - cell "1.551" [ref=e196] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e197] [cursor=pointer]:
+                - generic [ref=e198]: Dominan membahas Prabowo-Gibran
+            - row "#27 34 0.9235 Dominan membahas Anies-Muhaimin" [ref=e199]:
+              - cell "#27" [ref=e200] [cursor=pointer]
+              - cell "34" [ref=e201] [cursor=pointer]
+              - cell "0.9235" [ref=e202] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e203] [cursor=pointer]:
+                - generic [ref=e204]: Dominan membahas Anies-Muhaimin
+            - row "#47 13 1.0251 Dominan membahas Anies-Muhaimin" [ref=e205]:
+              - cell "#47" [ref=e206] [cursor=pointer]
+              - cell "13" [ref=e207] [cursor=pointer]
+              - cell "1.0251" [ref=e208] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e209] [cursor=pointer]:
+                - generic [ref=e210]: Dominan membahas Anies-Muhaimin
+            - row "#41 9 1.1073 Dominan membahas Prabowo-Gibran" [ref=e211]:
+              - cell "#41" [ref=e212] [cursor=pointer]
+              - cell "9" [ref=e213] [cursor=pointer]
+              - cell "1.1073" [ref=e214] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e215] [cursor=pointer]:
+                - generic [ref=e216]: Dominan membahas Prabowo-Gibran
+            - row "#30 5 1.2925 Dominan membahas Prabowo-Gibran" [ref=e217]:
+              - cell "#30" [ref=e218] [cursor=pointer]
+              - cell "5" [ref=e219] [cursor=pointer]
+              - cell "1.2925" [ref=e220] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e221] [cursor=pointer]:
+                - generic [ref=e222]: Dominan membahas Prabowo-Gibran
+            - row "#0 3 2 Dominan membahas Prabowo-Gibran" [ref=e223]:
+              - cell "#0" [ref=e224] [cursor=pointer]
+              - cell "3" [ref=e225] [cursor=pointer]
+              - cell "2" [ref=e226] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e227] [cursor=pointer]:
+                - generic [ref=e228]: Dominan membahas Prabowo-Gibran
+            - row "#4 4 2.3219 Dominan membahas Ganjar-Mahfud" [ref=e229]:
+              - cell "#4" [ref=e230] [cursor=pointer]
+              - cell "4" [ref=e231] [cursor=pointer]
+              - cell "2.3219" [ref=e232] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e233] [cursor=pointer]:
+                - generic [ref=e234]: Dominan membahas Ganjar-Mahfud
+            - row "#43 4 1.548 Dominan membahas Ganjar-Mahfud" [ref=e235]:
+              - cell "#43" [ref=e236] [cursor=pointer]
+              - cell "4" [ref=e237] [cursor=pointer]
+              - cell "1.548" [ref=e238] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e239] [cursor=pointer]:
+                - generic [ref=e240]: Dominan membahas Ganjar-Mahfud
+            - row "#46 4 1.548 Dominan membahas Prabowo-Gibran" [ref=e241]:
+              - cell "#46" [ref=e242] [cursor=pointer]
+              - cell "4" [ref=e243] [cursor=pointer]
+              - cell "1.548" [ref=e244] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e245] [cursor=pointer]:
+                - generic [ref=e246]: Dominan membahas Prabowo-Gibran
+            - row "#54 4 1.161 Tanpa kandidat dominan" [ref=e247]:
+              - cell "#54" [ref=e248] [cursor=pointer]
+              - cell "4" [ref=e249] [cursor=pointer]
+              - cell "1.161" [ref=e250] [cursor=pointer]
+              - cell "Tanpa kandidat dominan" [ref=e251] [cursor=pointer]:
+                - generic [ref=e252]: Tanpa kandidat dominan
+            - row "#24 3 2 Dominan membahas Anies-Muhaimin" [ref=e253]:
+              - cell "#24" [ref=e254] [cursor=pointer]
+              - cell "3" [ref=e255] [cursor=pointer]
+              - cell "2" [ref=e256] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e257] [cursor=pointer]:
+                - generic [ref=e258]: Dominan membahas Anies-Muhaimin
+            - row "#29 3 2 Dominan membahas Ganjar-Mahfud" [ref=e259]:
+              - cell "#29" [ref=e260] [cursor=pointer]
+              - cell "3" [ref=e261] [cursor=pointer]
+              - cell "2" [ref=e262] [cursor=pointer]
+              - cell "Dominan membahas Ganjar-Mahfud" [ref=e263] [cursor=pointer]:
+                - generic [ref=e264]: Dominan membahas Ganjar-Mahfud
+            - row "#36 3 2 Dominan membahas Anies-Muhaimin" [ref=e265]:
+              - cell "#36" [ref=e266] [cursor=pointer]
+              - cell "3" [ref=e267] [cursor=pointer]
+              - cell "2" [ref=e268] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e269] [cursor=pointer]:
+                - generic [ref=e270]: Dominan membahas Anies-Muhaimin
+            - row "#51 3 2 Dominan membahas Prabowo-Gibran" [ref=e271]:
+              - cell "#51" [ref=e272] [cursor=pointer]
+              - cell "3" [ref=e273] [cursor=pointer]
+              - cell "2" [ref=e274] [cursor=pointer]
+              - cell "Dominan membahas Prabowo-Gibran" [ref=e275] [cursor=pointer]:
+                - generic [ref=e276]: Dominan membahas Prabowo-Gibran
+            - row "#56 3 1.3333 Tanpa kandidat dominan" [ref=e277]:
+              - cell "#56" [ref=e278] [cursor=pointer]
+              - cell "3" [ref=e279] [cursor=pointer]
+              - cell "1.3333" [ref=e280] [cursor=pointer]
+              - cell "Tanpa kandidat dominan" [ref=e281] [cursor=pointer]:
+                - generic [ref=e282]: Tanpa kandidat dominan
+            - row "#42 38 0.6315 Dominan membahas Anies-Muhaimin" [ref=e283]:
+              - cell "#42" [ref=e284] [cursor=pointer]
+              - cell "38" [ref=e285] [cursor=pointer]
+              - cell "0.6315" [ref=e286] [cursor=pointer]
+              - cell "Dominan membahas Anies-Muhaimin" [ref=e287] [cursor=pointer]:
+                - generic [ref=e288]: Dominan membahas Anies-Muhaimin

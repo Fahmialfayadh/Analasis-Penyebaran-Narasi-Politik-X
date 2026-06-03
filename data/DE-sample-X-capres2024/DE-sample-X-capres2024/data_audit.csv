@@ -1,0 +1,9 @@
+Metric,Value
+total_rows,1002
+unique_accounts,584
+date_min,2024-01-04 17:59:59+00:00
+date_max,2024-01-04 18:21:20+00:00
+retweet_rows,563
+retweet_ratio,0.5619
+reply_or_mention_rows,661
+empty_cleaned_content,0
