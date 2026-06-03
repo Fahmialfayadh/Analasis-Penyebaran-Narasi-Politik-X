@@ -1,0 +1,400 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Finale Analisis Koordinasi Narasi Politik" [level=1] [ref=e5]
+      - generic [ref=e6]: Graf interaktif dari output CSV project, dengan mode RT dan Non-RT.
+    - generic "Mode analisis" [ref=e7]:
+      - button "Dengan RT" [ref=e8] [cursor=pointer]
+      - button "Tanpa RT" [ref=e9] [cursor=pointer]
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]: Tweet
+      - generic [ref=e13]: "1.002"
+    - generic [ref=e14]:
+      - generic [ref=e15]: Akun Unik
+      - generic [ref=e16]: "584"
+    - generic [ref=e17]:
+      - generic [ref=e18]: Rentang
+      - generic [ref=e19]: 21.35 menit
+    - generic [ref=e20]:
+      - generic [ref=e21]: Rasio RT
+      - generic [ref=e22]: 56.2%
+    - generic [ref=e23]:
+      - generic [ref=e24]: Edge Semantic
+      - generic [ref=e25]: "1.929"
+    - generic [ref=e26]:
+      - generic [ref=e27]: Edge RT
+      - generic [ref=e28]: "422"
+    - generic [ref=e29]:
+      - generic [ref=e30]: Evidence Semantic
+      - generic [ref=e31]: "2.192"
+    - generic [ref=e32]:
+      - generic [ref=e33]: Evidence RT
+      - generic [ref=e34]: "624"
+  - main [ref=e35]:
+    - generic [ref=e36]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]: Minimum similarity
+              - generic [ref=e45]: "0.65"
+            - slider "Minimum similarity 0.65" [ref=e46]: "0.65"
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e49]: Maks. jeda waktu
+              - generic [ref=e50]: 30.0 menit
+            - slider "Maks. jeda waktu 30.0 menit" [ref=e51]: "1800"
+        - generic [ref=e52]: "Mode ini memakai edge semantic dan shared-retweet yang sudah dipisahkan tipe relasinya. Filter aktif: similarity >= 0.65 dan jeda <= 30.0 menit."
+      - generic [ref=e53]:
+        - generic [ref=e54]: Semantic
+        - generic [ref=e56]: Retweet
+        - generic [ref=e58]: Mixed
+        - generic [ref=e60]: Lintas kluster
+    - complementary [ref=e62]:
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - generic [ref=e65]: Node Tampil
+          - generic [ref=e66]: "412"
+        - generic [ref=e67]:
+          - generic [ref=e68]: Edge Tampil
+          - generic [ref=e69]: "2.357"
+        - generic [ref=e70]:
+          - generic [ref=e71]: Kluster Tampil
+          - generic [ref=e72]: "41"
+        - generic [ref=e73]:
+          - generic [ref=e74]: Koordinasi Kuat
+          - generic [ref=e75]: "18"
+      - navigation [ref=e76]:
+        - button "Kluster" [ref=e77] [cursor=pointer]
+        - button "Detail" [ref=e78] [cursor=pointer]
+        - button "Data" [ref=e79] [cursor=pointer]
+      - generic [ref=e81]:
+        - article [ref=e82] [cursor=pointer]:
+          - generic [ref=e83]:
+            - generic [ref=e84]: "Kluster #2"
+            - generic [ref=e85]: Koordinasi Kuat
+          - generic [ref=e86]:
+            - text: 41 akun · 709 edge · 709 bukti · skor 4.662
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: ganjar, koperasi, kredit, mahfud, perbankan, pranowo
+        - article [ref=e87] [cursor=pointer]:
+          - generic [ref=e88]:
+            - generic [ref=e89]: "Kluster #5"
+            - generic [ref=e90]: Koordinasi Kuat
+          - generic [ref=e91]:
+            - text: 18 akun · 146 edge · 146 bukti · skor 4.054
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: ganjar, kesehatan, pranowo, bagian, mahfud, nasional
+        - article [ref=e92] [cursor=pointer]:
+          - generic [ref=e93]:
+            - generic [ref=e94]: "Kluster #7"
+            - generic [ref=e95]: Koordinasi Kuat
+          - generic [ref=e96]:
+            - text: 13 akun · 78 edge · 78 bukti · skor 3.807
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: bersama, ganjar, kita, kredit, macet, mahfud
+        - article [ref=e97] [cursor=pointer]:
+          - generic [ref=e98]:
+            - generic [ref=e99]: "Kluster #9"
+            - generic [ref=e100]: Koordinasi Kuat
+          - generic [ref=e101]:
+            - text: 11 akun · 55 edge · 186 bukti · skor 3.585
+            - text: Dominan membahas Prabowo-Gibran
+            - text: deklarasi, dukung, gibran, jadi, kabupaten, menangseputaran
+        - article [ref=e102] [cursor=pointer]:
+          - generic [ref=e103]:
+            - generic [ref=e104]: "Kluster #4"
+            - generic [ref=e105]: Koordinasi Kuat
+          - generic [ref=e106]:
+            - text: 27 akun · 240 edge · 240 bukti · skor 3.287
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: buat, count, down, februari, guys, kita
+        - article [ref=e107] [cursor=pointer]:
+          - generic [ref=e108]:
+            - generic [ref=e109]: "Kluster #12"
+            - generic [ref=e110]: Koordinasi Kuat
+          - generic [ref=e111]:
+            - text: 8 akun · 28 edge · 28 bukti · skor 3.170
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: baru, berupaya, ganjar, kekerasan, legislasi, lembaga
+        - article [ref=e112] [cursor=pointer]:
+          - generic [ref=e113]:
+            - generic [ref=e114]: "Kluster #13"
+            - generic [ref=e115]: Koordinasi Kuat
+          - generic [ref=e116]:
+            - text: 6 akun · 15 edge · 15 bukti · skor 2.807
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, baca, baik, ikut, minimum, nangkep
+        - article [ref=e117] [cursor=pointer]:
+          - generic [ref=e118]:
+            - generic [ref=e119]: "Kluster #14"
+            - generic [ref=e120]: Koordinasi Kuat
+          - generic [ref=e121]:
+            - text: 6 akun · 15 edge · 15 bukti · skor 2.807
+            - text: Dominan membahas Prabowo-Gibran
+            - text: beri, bertanya2, dulu, jawabannya, kenapa, kesempatan
+        - article [ref=e122] [cursor=pointer]:
+          - generic [ref=e123]:
+            - generic [ref=e124]: "Kluster #6"
+            - generic [ref=e125]: Koordinasi Kuat
+          - generic [ref=e126]:
+            - text: 15 akun · 69 edge · 69 bukti · skor 2.629
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: ganjar, mahfud, pranowo, dapat, perubahan, dukungan
+        - article [ref=e127] [cursor=pointer]:
+          - generic [ref=e128]:
+            - generic [ref=e129]: "Kluster #21"
+            - generic [ref=e130]: Koordinasi Kuat
+          - generic [ref=e131]:
+            - text: 5 akun · 10 edge · 10 bukti · skor 2.585
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: berpendapat, cuma, diri, ganjar, kebebasan, kepentingan
+        - article [ref=e132] [cursor=pointer]:
+          - generic [ref=e133]:
+            - generic [ref=e134]: "Kluster #19"
+            - generic [ref=e135]: Koordinasi Kuat
+          - generic [ref=e136]:
+            - text: 5 akun · 10 edge · 10 bukti · skor 2.585
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: biasa, capres, cawapres, ganjar, gas, kredit
+        - article [ref=e137] [cursor=pointer]:
+          - generic [ref=e138]:
+            - generic [ref=e139]: "Kluster #16"
+            - generic [ref=e140]: Koordinasi Kuat
+          - generic [ref=e141]:
+            - text: 5 akun · 10 edge · 10 bukti · skor 2.585
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: capres, ganjar, pranowo, urut, bersama, ganjartindakannyata
+        - article [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]:
+            - generic [ref=e144]: "Kluster #17"
+            - generic [ref=e145]: Koordinasi Kuat
+          - generic [ref=e146]:
+            - text: 5 akun · 10 edge · 10 bukti · skor 2.585
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: bahagia, capres, diharisusah, ganjar, ganjarmahfudrebound, ganjarpranowopilihanumat
+        - article [ref=e147] [cursor=pointer]:
+          - generic [ref=e148]:
+            - generic [ref=e149]: "Kluster #8"
+            - generic [ref=e150]: Koordinasi Kuat
+          - generic [ref=e151]:
+            - text: 12 akun · 36 edge · 66 bukti · skor 2.018
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, atas, bagi, baswedan, beredarnya, calon
+        - article [ref=e152] [cursor=pointer]:
+          - generic [ref=e153]:
+            - generic [ref=e154]: "Kluster #22"
+            - generic [ref=e155]: Koordinasi Kuat
+          - generic [ref=e156]:
+            - text: 5 akun · 7 edge · 7 bukti · skor 1.809
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: pupuk, ganjar, jateng, kurang, menjawab, meratanya
+        - article [ref=e157] [cursor=pointer]:
+          - generic [ref=e158]:
+            - generic [ref=e159]: "Kluster #15"
+            - generic [ref=e160]: Koordinasi Kuat
+          - generic [ref=e161]:
+            - text: 6 akun · 9 edge · 9 bukti · skor 1.684
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, bro, banget, besok, buat, datang
+        - article [ref=e162] [cursor=pointer]:
+          - generic [ref=e163]:
+            - generic [ref=e164]: "Kluster #11"
+            - generic [ref=e165]: Koordinasi Kuat
+          - generic [ref=e166]:
+            - text: 9 akun · 17 edge · 18 bukti · skor 1.569
+            - text: Lintas kandidat / perbandingan
+            - text: prabowo, buka, gibran, hendri, jokowi, komunikasi
+        - article [ref=e167] [cursor=pointer]:
+          - generic [ref=e168]:
+            - generic [ref=e169]: "Kluster #20"
+            - generic [ref=e170]: Koordinasi Kuat
+          - generic [ref=e171]:
+            - text: 5 akun · 6 edge · 6 bukti · skor 1.551
+            - text: Dominan membahas Prabowo-Gibran
+            - text: prabowo, presiden, dulu, hati, knp, tuhan
+        - article [ref=e172] [cursor=pointer]:
+          - generic [ref=e173]:
+            - generic [ref=e174]: "Kluster #18"
+            - generic [ref=e175]: Perlu Investigasi
+          - generic [ref=e176]:
+            - text: 5 akun · 5 edge · 5 bukti · skor 1.292
+            - text: Dominan membahas Prabowo-Gibran
+            - text: gibran, prabowo, elektabilitas, survei, brong, hampir
+        - article [ref=e177] [cursor=pointer]:
+          - generic [ref=e178]:
+            - generic [ref=e179]: "Kluster #0"
+            - generic [ref=e180]: Perlu Investigasi
+          - generic [ref=e181]:
+            - text: 63 akun · 418 edge · 539 bukti · skor 1.284
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: ganjar, mahfud, hebat, l3bihbaik, mahfudlebihbaik3, ganjarmahfud2024
+        - article [ref=e182] [cursor=pointer]:
+          - generic [ref=e183]:
+            - generic [ref=e184]: "Kluster #10"
+            - generic [ref=e185]: Perlu Investigasi
+          - generic [ref=e186]:
+            - text: 9 akun · 12 edge · 17 bukti · skor 1.107
+            - text: Dominan membahas Prabowo-Gibran
+            - text: prabowo, gibran, survei, alesan, capek, dihapus
+        - article [ref=e187] [cursor=pointer]:
+          - generic [ref=e188]:
+            - generic [ref=e189]: "Kluster #3"
+            - generic [ref=e190]: Perlu Investigasi
+          - generic [ref=e191]:
+            - text: 34 akun · 101 edge · 107 bukti · skor 0.923
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, baswedan, pidato, prabowo, anda, gibran
+        - article [ref=e192] [cursor=pointer]:
+          - generic [ref=e193]:
+            - generic [ref=e194]: "Kluster #23"
+            - generic [ref=e195]: Indikasi Lemah
+          - generic [ref=e196]:
+            - text: 4 akun · 6 edge · 6 bukti · skor 2.322
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: ayo, bakal, capres, favorit, ganjar, kayak
+        - article [ref=e197] [cursor=pointer]:
+          - generic [ref=e198]:
+            - generic [ref=e199]: "Kluster #26"
+            - generic [ref=e200]: Indikasi Lemah
+          - generic [ref=e201]:
+            - text: 3 akun · 3 edge · 138 bukti · skor 2.000
+            - text: Dominan membahas Prabowo-Gibran
+            - text: aceh, agusyudhoyono, ahy, bersama, demokrat, pdemokrat
+        - article [ref=e202] [cursor=pointer]:
+          - generic [ref=e203]:
+            - generic [ref=e204]: "Kluster #31"
+            - generic [ref=e205]: Indikasi Lemah
+          - generic [ref=e206]:
+            - text: 3 akun · 3 edge · 3 bukti · skor 2.000
+            - text: Dominan membahas Anies-Muhaimin
+            - text: abah, anak, anaknya, anies, ayah, cara
+        - article [ref=e207] [cursor=pointer]:
+          - generic [ref=e208]:
+            - generic [ref=e209]: "Kluster #29"
+            - generic [ref=e210]: Indikasi Lemah
+          - generic [ref=e211]:
+            - text: 3 akun · 3 edge · 3 bukti · skor 2.000
+            - text: Dominan membahas Ganjar-Mahfud
+            - text: adanya, apa, bayar, benar, bgtu, dulu
+        - article [ref=e212] [cursor=pointer]:
+          - generic [ref=e213]:
+            - generic [ref=e214]: "Kluster #28"
+            - generic [ref=e215]: Indikasi Lemah
+          - generic [ref=e216]:
+            - text: 3 akun · 3 edge · 3 bukti · skor 2.000
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, acara, attention, cupsleeve, hai, help
+        - article [ref=e217] [cursor=pointer]:
+          - generic [ref=e218]:
+            - generic [ref=e219]: "Kluster #30"
+            - generic [ref=e220]: Indikasi Lemah
+          - generic [ref=e221]:
+            - text: 3 akun · 3 edge · 3 bukti · skor 2.000
+            - text: Dominan membahas Prabowo-Gibran
+            - text: asal, asalbukan02, asalbukanprabowo, asalbukanwowo, bila, janganpilih02
+        - article [ref=e222] [cursor=pointer]:
+          - generic [ref=e223]:
+            - generic [ref=e224]: "Kluster #39"
+            - generic [ref=e225]: Indikasi Lemah
+          - generic [ref=e226]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Prabowo-Gibran
+            - text: anggaran, berdiri, bertambah, indonesia, jebol, menhan
+        - article [ref=e227] [cursor=pointer]:
+          - generic [ref=e228]:
+            - generic [ref=e229]: "Kluster #35"
+            - generic [ref=e230]: Indikasi Lemah
+          - generic [ref=e231]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: china, hingga, hoax2, ikut, jkt, keramaian
+        - article [ref=e232] [cursor=pointer]:
+          - generic [ref=e233]:
+            - generic [ref=e234]: "Kluster #38"
+            - generic [ref=e235]: Indikasi Lemah
+          - generic [ref=e236]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, ahok, amanat, aminajadulu, aniesmuhaimin2024, baswedan
+        - article [ref=e237] [cursor=pointer]:
+          - generic [ref=e238]:
+            - generic [ref=e239]: "Kluster #40"
+            - generic [ref=e240]: Indikasi Lemah
+          - generic [ref=e241]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, bagaimana, begini, bukankah, diakui, kan
+        - article [ref=e242] [cursor=pointer]:
+          - generic [ref=e243]:
+            - generic [ref=e244]: "Kluster #33"
+            - generic [ref=e245]: Indikasi Lemah
+          - generic [ref=e246]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, desak, jadi, liat, live, pilih
+        - article [ref=e247] [cursor=pointer]:
+          - generic [ref=e248]:
+            - generic [ref=e249]: "Kluster #32"
+            - generic [ref=e250]: Indikasi Lemah
+          - generic [ref=e251]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, janji, banyak, baswedan, capres, cipta
+        - article [ref=e252] [cursor=pointer]:
+          - generic [ref=e253]:
+            - generic [ref=e254]: "Kluster #34"
+            - generic [ref=e255]: Indikasi Lemah
+          - generic [ref=e256]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, ekspedisiamin, lima, masyarakat, minang, mulai
+        - article [ref=e257] [cursor=pointer]:
+          - generic [ref=e258]:
+            - generic [ref=e259]: "Kluster #36"
+            - generic [ref=e260]: Indikasi Lemah
+          - generic [ref=e261]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, kita, mari, saling, allah, banner
+        - article [ref=e262] [cursor=pointer]:
+          - generic [ref=e263]:
+            - generic [ref=e264]: "Kluster #37"
+            - generic [ref=e265]: Indikasi Lemah
+          - generic [ref=e266]:
+            - text: 2 akun · 1 edge · 1 bukti · skor 1.585
+            - text: Dominan membahas Prabowo-Gibran
+            - text: banyak, bilang, dulu, emosional, hingga, jelas
+        - article [ref=e267] [cursor=pointer]:
+          - generic [ref=e268]:
+            - generic [ref=e269]: "Kluster #24"
+            - generic [ref=e270]: Indikasi Lemah
+          - generic [ref=e271]:
+            - text: 4 akun · 4 edge · 4 bukti · skor 1.548
+            - text: Dominan membahas Prabowo-Gibran
+            - text: pupuk, subsidi, jateng, kemarin, knp, tiba
+        - article [ref=e272] [cursor=pointer]:
+          - generic [ref=e273]:
+            - generic [ref=e274]: "Kluster #27"
+            - generic [ref=e275]: Indikasi Lemah
+          - generic [ref=e276]:
+            - text: 3 akun · 2 edge · 2 bukti · skor 1.333
+            - text: Dominan membahas Prabowo-Gibran
+            - text: anis, apaan, belepotan, goblok, nulis
+        - article [ref=e277] [cursor=pointer]:
+          - generic [ref=e278]:
+            - generic [ref=e279]: "Kluster #25"
+            - generic [ref=e280]: Indikasi Lemah
+          - generic [ref=e281]:
+            - text: 4 akun · 3 edge · 4 bukti · skor 1.161
+            - text: Dominan membahas Prabowo-Gibran
+            - text: dulu, abis, aib, ampun, asalbukan02, asalbukanprabowogibran
+        - article [ref=e282] [cursor=pointer]:
+          - generic [ref=e283]:
+            - generic [ref=e284]: "Kluster #1"
+            - generic [ref=e285]: Rendah
+          - generic [ref=e286]:
+            - text: 51 akun · 108 edge · 135 bukti · skor 0.483
+            - text: Dominan membahas Anies-Muhaimin
+            - text: anies, prabowo, jadi, jakarta, ahok, banyak

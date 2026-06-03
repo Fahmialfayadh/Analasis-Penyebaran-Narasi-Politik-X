@@ -1,0 +1,103 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Finale Analisis Koordinasi Narasi Politik" [level=5] [ref=e5]
+      - generic [ref=e6]: Pakai RT
+    - generic [ref=e7]:
+      - button "Pakai RT" [ref=e8] [cursor=pointer]
+      - button "Tanpa RT" [ref=e9] [cursor=pointer]
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e15]:
+        - generic [ref=e16]: Filter Sensitivitas
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]: Minimum similarity
+            - generic [ref=e20]: "0.65"
+          - slider [ref=e21]: "0.65"
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]: Maksimum jeda waktu
+            - generic [ref=e25]: 30.0 menit
+          - slider [ref=e26]: "1800"
+        - generic [ref=e27]: Mode Pakai RT; edge internal kluster tampil jika similarity >= 0.65 dan jeda <= 30.0 menit.
+      - generic [ref=e28]:
+        - generic [ref=e29]: Warna Edge
+        - generic [ref=e30]: Semantic
+        - generic [ref=e32]: Retweet
+        - generic [ref=e34]: Campuran
+        - generic [ref=e36]: Warna node tetap membedakan kluster visual. Klik tidak menggerakkan kamera.
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - button "Ikhtisar" [ref=e39] [cursor=pointer]
+        - button "Analisis Detil" [ref=e40] [cursor=pointer]
+        - button "Kluster" [ref=e41] [cursor=pointer]
+        - button "Data" [ref=e42] [cursor=pointer]
+      - generic [ref=e261]:
+        - generic [ref=e262]:
+          - 'heading "Kluster #2" [level=5] [ref=e263]'
+          - generic [ref=e264]: Koordinasi Kuat
+        - generic [ref=e265]: "Dominan membahas Ganjar-Mahfud. Topik utama: ganjar, koperasi, kredit. Bukti ringkas: 709 bukti pasangan; 709 edge semantic, 0 edge RT, 0 edge campuran. Label fokus narasi adalah objek pembahasan, bukan klaim dukungan politik."
+        - generic [ref=e266]:
+          - generic [ref=e267]:
+            - generic [ref=e268]: Jumlah Akun
+            - generic [ref=e269]: "41"
+          - generic [ref=e270]:
+            - generic [ref=e271]: Density
+            - generic [ref=e272]: "0.8646"
+          - generic [ref=e273]:
+            - generic [ref=e274]: Avg Similarity
+            - generic [ref=e275]: "0.831"
+          - generic [ref=e276]:
+            - generic [ref=e277]: Median Jeda
+            - generic [ref=e278]: 6 detik
+        - generic [ref=e279]:
+          - generic [ref=e280]: ganjar
+          - generic [ref=e281]: koperasi
+          - generic [ref=e282]: kredit
+          - generic [ref=e283]: mahfud
+          - generic [ref=e284]: perbankan
+        - heading "Bukti Pasangan Terkuat" [level=6] [ref=e285]
+        - generic [ref=e286]:
+          - generic [ref=e287]:
+            - generic [ref=e288]: "@Gmonoona167 - @ShorshB"
+            - generic [ref=e289]: semantic · similarity 1.000 · jeda 0 detik · 1 bukti
+            - blockquote [ref=e290]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #Ganjar...\""
+            - blockquote [ref=e291]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #Ganjar...\""
+          - generic [ref=e292]:
+            - generic [ref=e293]: "@Gmonoona167 - @jovaniesalinas"
+            - generic [ref=e294]: semantic · similarity 1.000 · jeda 0 detik · 1 bukti
+            - blockquote [ref=e295]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #Ganjar...\""
+            - blockquote [ref=e296]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #Ganjar...\""
+          - generic [ref=e297]:
+            - generic [ref=e298]: "@ShorshB - @jovaniesalinas"
+            - generic [ref=e299]: semantic · similarity 1.000 · jeda 0 detik · 1 bukti
+            - blockquote [ref=e300]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #Ganjar...\""
+            - blockquote [ref=e301]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #Ganjar...\""
+        - heading "Akun Utama" [level=6] [ref=e302]
+        - generic [ref=e303]:
+          - generic [ref=e304]:
+            - generic [ref=e305]:
+              - generic [ref=e306] [cursor=pointer]: "@Gmonoona167"
+              - generic [ref=e307]: "RT: 0.0%"
+            - generic [ref=e308]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #GanjarPranowoPilihanUmat #JNK\""
+          - generic [ref=e309]:
+            - generic [ref=e310]:
+              - generic [ref=e311] [cursor=pointer]: "@ShorshB"
+              - generic [ref=e312]: "RT: 0.0%"
+            - generic [ref=e313]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #GanjarPranowoPilihanUmat #JNK\""
+          - generic [ref=e314]:
+            - generic [ref=e315]:
+              - generic [ref=e316] [cursor=pointer]: "@jovaniesalinas"
+              - generic [ref=e317]: "RT: 0.0%"
+            - generic [ref=e318]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #GanjarPranowoPilihanUmat #JNK\""
+          - generic [ref=e319]:
+            - generic [ref=e320]:
+              - generic [ref=e321] [cursor=pointer]: "@jrehdphayazo"
+              - generic [ref=e322]: "RT: 0.0%"
+            - generic [ref=e323]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #GanjarPranowoPilihanUmat #JNK\""
+          - generic [ref=e324]:
+            - generic [ref=e325]:
+              - generic [ref=e326] [cursor=pointer]: "@mae_trinidad"
+              - generic [ref=e327]: "RT: 0.0%"
+            - generic [ref=e328]: "\"Program Ganjar Pranowo dan Mahfud MD, duo hebat untuk rakyat. 35% kredit perbankan difokuskan untuk dorong koperasi dan UMKM. Inilah perubahan nyata.#GanjarMahfudRebound #GanjarPranowoPilihanUmat #JNK\""
