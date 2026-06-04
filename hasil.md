@@ -216,7 +216,7 @@ Berikut beberapa kluster teratas dari `cluster_density_report.csv`.
 | 6 | 13 | 1.00000 | 78 | 0 | 78 | 3.80735 | Sangat mencurigakan | nelayan, beban, kredit macet |
 | 1 | 11 | 1.00000 | 186 | 55 | 6 | 3.58496 | Sangat mencurigakan | deklarasi pemuda, Prabowo-Gibran |
 | 12 | 27 | 0.68376 | 240 | 0 | 240 | 3.28708 | Sangat mencurigakan | count down, Februari |
-| 9 | 8 | 1.00000 | 28 | 0 | 28 | 3.16993 | Sangat mencurigakan | kekerasan seksual, norma |
+| 9 | 8 | 1.00000 | 28 | 0 | 28 | 3.16993 | Sangat mencurigakan | norma, membentuk, direspons |
 | 20 | 6 | 1.00000 | 15 | 15 | 0 | 2.80735 | Sangat mencurigakan | sumber RT `tomlembong` |
 | 15 | 6 | 1.00000 | 15 | 15 | 0 | 2.80735 | Sangat mencurigakan | sumber RT `dapitnih` |
 
@@ -301,8 +301,8 @@ Cluster ID pada tabel ini berasal dari `visualisasi_non_rt_light.html`. ID ini t
 | 35 | 7 | 1.0000 | 3.0000 | 21 | 1.000 | 1 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | pentingnya, penyuluhan, desa |
 | 63 | 17 | 0.6912 | 2.8822 | 94 | 0.915 | 4 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | mental, kesehatan, dampak |
 | 17 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 13 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | kepentingan, kebebasan, berpendapat |
-| 29 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 11 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | cawapres, kesejahteraan, kredit |
-| 34 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 17 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | tancap, gas, perbankan |
+| 29 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 11 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | cawapres, menuju, persembahkan, kesejahteraan |
+| 34 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 17 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | tancap, gas, luar, biasa |
 | 69 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 14 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | hari susah, bahagia |
 | 73 | 7 | 0.4286 | 1.2857 | 12 | 0.802 | 2.3 menit | Perlu Investigasi | Dominan membahas Ganjar-Mahfud | ganjarmahfud, mahfudlebihbaik |
 | 72 | 16 | 0.3000 | 1.2262 | 43 | 0.808 | 46 detik | Perlu Investigasi | Dominan membahas Ganjar-Mahfud | ganjarmahfud, mahfudlebihbaik |

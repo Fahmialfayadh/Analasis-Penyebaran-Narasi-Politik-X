@@ -1,6 +1,8 @@
 /.agents
 /.codex
 /.venv
+__pycache__/
+*.py[cod]
 
 # Large/non-code presentation artifacts
 /artifacts/presentations/
