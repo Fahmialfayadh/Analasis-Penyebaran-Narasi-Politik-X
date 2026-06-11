@@ -312,6 +312,18 @@ def build_nodes(df):
             "last_tweet": short_text(
                 latest_row.get("cleaned_content") or latest_row.get("content"), limit=260
             ),
+            "tweet_dates": [
+                d.strftime("%Y-%m-%d %H:%M")
+                for d in sorted(group["date_created"].dropna())[-5:]
+            ],
+            "first_tweet_time": (
+                group["date_created"].min().strftime("%Y-%m-%d %H:%M")
+                if pd.notna(group["date_created"].min()) else "N/A"
+            ),
+            "last_tweet_time": (
+                group["date_created"].max().strftime("%Y-%m-%d %H:%M")
+                if pd.notna(group["date_created"].max()) else "N/A"
+            ),
         }
     return nodes
 
@@ -2121,6 +2133,68 @@ def render_html_v2(payload):
             line-height: 1.45;
         }
 
+        .tweet-time-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            font-size: 0.78rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .tweet-time-item:last-child {
+            border-bottom: none;
+        }
+
+        .tweet-time-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #94a3b8;
+            flex-shrink: 0;
+        }
+
+        .inspeksi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .inspeksi-type-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 4px;
+            padding: 2px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .inspeksi-type-badge.edge-type {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .edge-conn-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 0.78rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+        }
+
+        .edge-conn-item:hover {
+            color: #0f172a;
+        }
+
+        .edge-conn-item:last-child {
+            border-bottom: none;
+        }
+
         @media (max-width: 980px) {
             body {
                 overflow: auto;
@@ -2183,9 +2257,13 @@ def render_html_v2(payload):
                     <div class="slider-label"><span>Minimum similarity</span><span class="slider-value" id="sim-value">0.75</span></div>
                     <input id="sim-slider" type="range" min="0.65" max="1" step="0.01" value="0.75">
                 </div>
-                <div class="slider-row mb-0">
+                <div class="slider-row">
                     <div class="slider-label"><span>Maksimum jeda waktu</span><span class="slider-value" id="time-value">5.0 menit</span></div>
                     <input id="time-slider" type="range" min="0" max="1800" step="30" value="300">
+                </div>
+                <div class="slider-row mb-0">
+                    <div class="slider-label"><span>Ukuran node</span><span class="slider-value" id="size-value">1.0x</span></div>
+                    <input id="size-slider" type="range" min="0.3" max="2.0" step="0.1" value="1.0">
                 </div>
                 <div class="text-muted small" id="filter-note" style="line-height: 1.4; margin-top: 8px;"></div>
             </div>
@@ -2203,6 +2281,7 @@ def render_html_v2(payload):
                 <button class="nav-link active" data-tab="overview" type="button">Ikhtisar</button>
                 <button class="nav-link" data-tab="report" type="button">Report</button>
                 <button class="nav-link" data-tab="detail" type="button">Analisis Detil</button>
+                <button class="nav-link" data-tab="inspeksi" type="button">Inspeksi</button>
                 <button class="nav-link" data-tab="all-clusters" type="button">Kluster</button>
                 <button class="nav-link" data-tab="data" type="button">Data</button>
             </div>
@@ -2265,6 +2344,8 @@ def render_html_v2(payload):
                             <div class="d-flex flex-wrap gap-2 mb-2">
                                 <span class="keyword-badge" id="node-query">Query</span>
                                 <span class="keyword-badge" id="node-rt-ratio">Rasio RT akun: 0.00</span>
+                                <span class="keyword-badge" id="node-first-time" style="background:#f0fdf4;border-color:#86efac;">Pertama: -</span>
+                                <span class="keyword-badge" id="node-last-time" style="background:#fef3c7;border-color:#fcd34d;">Terakhir: -</span>
                             </div>
                             <blockquote class="tweet-quote mb-0" id="node-tweet" style="border-left-color:#38bdf8;">Tweet...</blockquote>
                         </div>
@@ -2302,6 +2383,14 @@ def render_html_v2(payload):
                     <h6 class="hud-title mt-4">Referensi Sensitivitas Evidence Semantic</h6>
                     <div id="sensitivity-bars"></div>
                 </div>
+
+                <div class="tab-pane" id="inspeksi">
+                    <div id="inspeksi-empty" class="text-center text-muted my-5">
+                        <p class="mb-0">Klik node atau edge di graf untuk melihat detail lengkap.</p>
+                        <p class="small" style="margin-top:6px;">Tab ini menampilkan informasi lengkap termasuk waktu tweet, keyword, dan koneksi edge dari item yang dipilih.</p>
+                    </div>
+                    <div id="inspeksi-content" style="display:none;"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -2316,7 +2405,9 @@ def render_html_v2(payload):
         minSim: DATA.modes.with_rt.defaults.min_similarity,
         maxDelta: DATA.modes.with_rt.defaults.max_delta,
         selectedCluster: null,
-        selectedNode: null
+        selectedNode: null,
+        selectedEdge: null,
+        nodeSizeMultiplier: 1.0
     };
 
     let network = null;
@@ -2485,7 +2576,8 @@ def render_html_v2(payload):
         const nodes = Array.from(latestNodes).map(nodeId => {
             const node = DATA.nodes[nodeId] || { id: nodeId };
             const cid = communityOf(nodeId);
-            const size = Math.min(32, 11 + Math.log2((degree.get(nodeId) || 1) + 1) * 3.2);
+            const baseSize = Math.min(32, 11 + Math.log2((degree.get(nodeId) || 1) + 1) * 3.2);
+            const size = baseSize * state.nodeSizeMultiplier;
             const pos = stablePosition(nodeId);
             return {
                 id: nodeId,
@@ -2497,7 +2589,7 @@ def render_html_v2(payload):
                 size,
                 color: clusterColor(cid),
                 borderWidth: state.selectedNode === nodeId ? 3 : 1,
-                title: `<b>@${nodeId}</b><br>Kluster: #${cid}<br>Tweet: ${node.tweet_count || 0}<br>Rasio RT: ${fmtPct(node.rt_ratio || 0)}<br>Query: ${node.query_context || "-"}<br><br>${node.last_tweet || ""}`
+                title: `<b>@${nodeId}</b><br>Kluster: #${cid}<br>Tweet: ${node.tweet_count || 0}<br>Rasio RT: ${fmtPct(node.rt_ratio || 0)}<br>Query: ${node.query_context || "-"}<br>Waktu: ${node.first_tweet_time || "?"} → ${node.last_tweet_time || "?"}<br><br>${truncText(node.last_tweet, 100)}`
             };
         });
 
@@ -2547,12 +2639,24 @@ def render_html_v2(payload):
             network.moveTo({ position: keepView.position, scale: keepView.scale });
         }
 
-        network.on("selectNode", params => {
-            const nodeId = params.nodes[0];
-            state.selectedNode = nodeId;
-            state.selectedCluster = communityOf(nodeId);
-            updateDetail();
-            activateTab("detail");
+        network.on("click", params => {
+            if (params.nodes.length) {
+                const nodeId = params.nodes[0];
+                state.selectedNode = nodeId;
+                state.selectedEdge = null;
+                state.selectedCluster = communityOf(nodeId);
+                updateDetail();
+                updateInspection();
+                activateTab("inspeksi");
+            } else if (params.edges.length) {
+                const edgeId = params.edges[0];
+                const edge = latestEdges.find(e => e.id === edgeId);
+                if (edge) {
+                    state.selectedEdge = edge;
+                    updateInspection();
+                    activateTab("inspeksi");
+                }
+            }
         });
     }
 
@@ -2662,7 +2766,9 @@ def render_html_v2(payload):
             document.getElementById("node-cluster").innerText = `Kluster #${communityOf(node.id)}`;
             document.getElementById("node-query").innerText = `Query: ${node.query_context || "-"}`;
             document.getElementById("node-rt-ratio").innerText = `Rasio RT akun: ${Number(node.rt_ratio || 0).toFixed(2)}`;
-            document.getElementById("node-tweet").innerText = `"${node.last_tweet || "-"}"`;
+            document.getElementById("node-first-time").innerText = `Pertama: ${node.first_tweet_time || "-"}`;
+            document.getElementById("node-last-time").innerText = `Terakhir: ${node.last_tweet_time || "-"}`;
+            document.getElementById("node-tweet").innerText = `"${truncText(node.last_tweet, 140) || "-"}"`;
         } else {
             nodeCard.style.display = "none";
         }
@@ -2690,8 +2796,8 @@ def render_html_v2(payload):
             div.innerHTML = `
                 <div class="fw-bold small mb-1">@${edge.source} - @${edge.target}</div>
                 <div class="evidence-meta">${edge.edge_types} · similarity ${edge.avg_similarity.toFixed(3)} · jeda ${fmtDelta(edge.min_delta)} · ${edge.edge_count} bukti</div>
-                <blockquote class="tweet-quote mt-2" style="border-left-color:${edgeColor(edge)};">"${edge.tweet_1 || "-"}"</blockquote>
-                <blockquote class="tweet-quote mb-0" style="border-left-color:${edgeColor(edge)};">"${edge.tweet_2 || "-"}"</blockquote>
+                <blockquote class="tweet-quote mt-2" style="border-left-color:${edgeColor(edge)};">"${truncText(edge.tweet_1, 140)}"</blockquote>
+                <blockquote class="tweet-quote mb-0" style="border-left-color:${edgeColor(edge)};">"${truncText(edge.tweet_2, 140)}"</blockquote>
             `;
             evidenceContainer.appendChild(div);
         });
@@ -2706,7 +2812,8 @@ def render_html_v2(payload):
                     <span class="top-account-user" data-node="${account.id}">@${account.id}</span>
                     <span class="text-muted small">RT: ${fmtPct(account.rt_ratio || 0)}</span>
                 </div>
-                <div class="text-muted small" style="line-height:1.4;">"${account.last_tweet || "-"}"</div>
+                <div class="text-muted" style="font-size:0.7rem; margin-bottom:4px; color:#64748b;">${account.first_tweet_time || ""} → ${account.last_tweet_time || ""}</div>
+                <div class="text-muted small" style="line-height:1.4;">"${truncText(account.last_tweet, 120)}"</div>
             `;
             div.querySelector(".top-account-user").onclick = () => {
                 state.selectedNode = account.id;
@@ -2715,6 +2822,90 @@ def render_html_v2(payload):
             };
             accountContainer.appendChild(div);
         });
+    }
+
+    function truncText(text, limit) {
+        if (!text || text.length <= limit) return text || "-";
+        return text.substring(0, limit) + "…";
+    }
+
+    function updateInspection() {
+        const container = document.getElementById("inspeksi-content");
+        const empty = document.getElementById("inspeksi-empty");
+
+        if (state.selectedEdge) {
+            empty.style.display = "none";
+            container.style.display = "block";
+            const edge = state.selectedEdge;
+            const nodeA = DATA.nodes[edge.source] || {};
+            const nodeB = DATA.nodes[edge.target] || {};
+            container.innerHTML = `
+                <div class="inspeksi-header">
+                    <h6 class="hud-title m-0">Edge</h6>
+                    <span class="inspeksi-type-badge edge-type">${edge.edge_types}</span>
+                </div>
+                <div class="fw-bold mb-3" style="font-size:1.05rem;">@${edge.source} — @${edge.target}</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-label">Tipe Edge</span><span class="info-value">${edge.edge_types}</span></div>
+                    <div class="info-row"><span class="info-label">Similarity</span><span class="info-value">${edge.avg_similarity.toFixed(4)}</span></div>
+                    <div class="info-row"><span class="info-label">Jeda Minimum</span><span class="info-value">${fmtDelta(edge.min_delta)}</span></div>
+                    <div class="info-row"><span class="info-label">Jumlah Bukti</span><span class="info-value">${edge.edge_count}</span></div>
+                    <div class="info-row"><span class="info-label">Weight</span><span class="info-value">${edge.weight.toFixed(4)}</span></div>
+                    <div class="info-row"><span class="info-label">Max Weight</span><span class="info-value">${edge.max_weight.toFixed(4)}</span></div>
+                    <div class="info-row"><span class="info-label">Avg Time Score</span><span class="info-value">${edge.avg_time_score.toFixed(4)}</span></div>
+                    ${edge.dominant_rt_source ? `<div class="info-row"><span class="info-label">Sumber RT</span><span class="info-value">@${edge.dominant_rt_source}</span></div>` : ""}
+                    ${edge.query_context ? `<div class="info-row"><span class="info-label">Query Context</span><span class="info-value">${edge.query_context}</span></div>` : ""}
+                </div>
+                <h6 class="hud-title mt-4">Waktu Tweet Masing-masing Akun</h6>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-label">@${edge.source}</span><span class="info-value">${nodeA.first_tweet_time || "?"} → ${nodeA.last_tweet_time || "?"}</span></div>
+                    <div class="info-row"><span class="info-label">@${edge.target}</span><span class="info-value">${nodeB.first_tweet_time || "?"} → ${nodeB.last_tweet_time || "?"}</span></div>
+                </div>
+                <h6 class="hud-title mt-4">Tweet @${edge.source} (Lengkap)</h6>
+                <blockquote class="tweet-quote">"${edge.tweet_1 || "-"}"</blockquote>
+                <h6 class="hud-title mt-4">Tweet @${edge.target} (Lengkap)</h6>
+                <blockquote class="tweet-quote">"${edge.tweet_2 || "-"}"</blockquote>
+            `;
+        } else if (state.selectedNode) {
+            empty.style.display = "none";
+            container.style.display = "block";
+            const node = DATA.nodes[state.selectedNode] || {};
+            const cid = communityOf(state.selectedNode);
+            const nodeEdges = latestEdges.filter(e => e.source === state.selectedNode || e.target === state.selectedNode);
+            const keywordsHtml = (node.keywords || []).map(k => `<span class="keyword-badge">${k}</span>`).join("") || '<span class="keyword-badge">N/A</span>';
+            const edgesHtml = nodeEdges.length ? nodeEdges.map(e => {
+                const other = e.source === state.selectedNode ? e.target : e.source;
+                return `<div class="edge-conn-item"><span class="tweet-time-dot" style="background:${edgeColor(e)};"></span>@${other} · ${e.edge_types} · sim ${e.avg_similarity.toFixed(3)} · ${fmtDelta(e.min_delta)}</div>`;
+            }).join("") : '<div class="text-muted small">Tidak ada edge internal.</div>';
+            const timesHtml = (node.tweet_dates || []).map(d => `<div class="tweet-time-item"><span class="tweet-time-dot"></span>${d}</div>`).join("") || '<div class="text-muted small">Tidak ada data waktu.</div>';
+
+            container.innerHTML = `
+                <div class="inspeksi-header">
+                    <h6 class="hud-title m-0">Node</h6>
+                    <span class="inspeksi-type-badge" style="background:${clusterColor(cid)};color:#fff;">Kluster #${cid}</span>
+                </div>
+                <div class="fw-bold mb-3" style="font-size:1.05rem;">@${node.id || state.selectedNode}</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-label">Jumlah Tweet</span><span class="info-value">${node.tweet_count || 0}</span></div>
+                    <div class="info-row"><span class="info-label">Rasio RT</span><span class="info-value">${fmtPct(node.rt_ratio || 0)}</span></div>
+                    <div class="info-row"><span class="info-label">Query</span><span class="info-value">${node.query_context || "-"}</span></div>
+                    <div class="info-row"><span class="info-label">Tweet Pertama</span><span class="info-value">${node.first_tweet_time || "N/A"}</span></div>
+                    <div class="info-row"><span class="info-label">Tweet Terakhir</span><span class="info-value">${node.last_tweet_time || "N/A"}</span></div>
+                    <div class="info-row"><span class="info-label">Edge Internal</span><span class="info-value">${nodeEdges.length}</span></div>
+                </div>
+                <h6 class="hud-title mt-4">Keyword</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">${keywordsHtml}</div>
+                <h6 class="hud-title mt-4">Tweet Terakhir (Lengkap)</h6>
+                <blockquote class="tweet-quote">"${node.last_tweet || "-"}"</blockquote>
+                <h6 class="hud-title mt-4">Riwayat Waktu Tweet (Maks 5)</h6>
+                ${timesHtml}
+                <h6 class="hud-title mt-4">Koneksi Edge (${nodeEdges.length})</h6>
+                ${edgesHtml}
+            `;
+        } else {
+            empty.style.display = "block";
+            container.style.display = "none";
+        }
     }
 
     function updateStats() {
@@ -2894,6 +3085,7 @@ def render_html_v2(payload):
     }
 
     function render() {
+        state.selectedEdge = null;
         const rawEdges = filteredEdges();
         latestRawEdges = rawEdges;
         const computed = computeClusters(rawEdges);
@@ -2915,6 +3107,7 @@ def render_html_v2(payload):
         renderTables();
         updateDetail();
         updateReport();
+        updateInspection();
         renderNetwork();
     }
 
@@ -2924,6 +3117,10 @@ def render_html_v2(payload):
         state.maxDelta = DATA.modes[mode].defaults.max_delta;
         state.selectedCluster = null;
         state.selectedNode = null;
+        state.selectedEdge = null;
+        state.nodeSizeMultiplier = 1.0;
+        document.getElementById("size-slider").value = 1.0;
+        document.getElementById("size-value").innerText = "1.0x";
         document.getElementById("sim-slider").value = state.minSim;
         document.getElementById("time-slider").value = state.maxDelta;
         document.getElementById("mode-with-rt").classList.toggle("active", mode === "with_rt");
@@ -2949,6 +3146,11 @@ def render_html_v2(payload):
         state.selectedCluster = null;
         state.selectedNode = null;
         render();
+    };
+    document.getElementById("size-slider").oninput = event => {
+        state.nodeSizeMultiplier = Number(event.target.value);
+        document.getElementById("size-value").innerText = state.nodeSizeMultiplier.toFixed(1) + "x";
+        renderNetwork();
     };
     document.querySelectorAll(".nav-link").forEach(button => {
         button.onclick = () => activateTab(button.dataset.tab);
