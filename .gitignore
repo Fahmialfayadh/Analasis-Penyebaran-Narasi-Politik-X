@@ -8,3 +8,7 @@ __pycache__/
 /artifacts/presentations/
 artifacts/presentations/
 .playwright-mcp
+venv-ppt/
+venv/
+.venv/
+
