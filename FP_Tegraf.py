@@ -46,6 +46,8 @@ def short_text(text, limit=180):
     return text if len(text) <= limit else text[: limit - 3] + "..."
 
 
+# [REFERENSI PPT: SLIDE 3 - PERSIAPAN DATA]
+# cleaned_content: membersihkan spasi, RT, URL untuk pengukuran kesamaan semantik.
 def clean_text_for_embedding(text):
     """Membersihkan teks untuk embedding tanpa menghapus substansi narasi."""
     if not isinstance(text, str):
@@ -57,6 +59,8 @@ def clean_text_for_embedding(text):
     return text.strip()
 
 
+# [REFERENSI PPT: SLIDE 3 - PERSIAPAN DATA]
+# topic_content: pembersihan lebih ketat untuk ekstraksi kata kunci/topik TF-IDF.
 def clean_text_for_topic(text):
     """Versi lebih bersih untuk TF-IDF agar keyword tidak didominasi URL/mention."""
     text = clean_text_for_embedding(text).lower()
@@ -85,6 +89,8 @@ def clean_keyword(word):
 # =====================================================================
 # MODUL 1: DATA INGESTION, CLEANING, DAN AUDIT
 # =====================================================================
+# [REFERENSI PPT: SLIDE 1 - SUMBER DATA]
+# Fungsi ini memuat sample data tweet yang difilter khusus keyword ganjar, prabowo, anies.
 def load_and_combine_json(main_folder, file_pattern="data-twit-*.json", max_rows=None):
     """Membaca file JSON paslon, menjaga metadata penting, lalu menggabungkannya."""
     print("Membaca data tweet mentah...")
@@ -134,6 +140,8 @@ def load_and_combine_json(main_folder, file_pattern="data-twit-*.json", max_rows
     return df
 
 
+# [REFERENSI PPT: SLIDE 3 - PERSIAPAN DATA]
+# Tahapan penyiapan teks dan metadata (cleaned_content & topic_content) mengurangi bias platform.
 def preprocess_tweets(df):
     """Membersihkan teks dan mengekstrak metadata RT yang mengubah makna analisis."""
     print("Melakukan preprocessing teks dan ekstraksi metadata RT...")
@@ -196,6 +204,8 @@ def preprocess_tweets(df):
     return df
 
 
+# [REFERENSI PPT: SLIDE 2 - RINGKASAN DATASET]
+# Menghitung statistik ringkasan: Total tweet, Akun unik, Rasio RT, dll.
 def audit_dataset(df, output_filename=None):
     """Mencetak dan menyimpan audit singkat agar batas klaim analisis jelas."""
     print("\n=== AUDIT DATA ===")
@@ -239,6 +249,8 @@ def audit_dataset(df, output_filename=None):
 # =====================================================================
 # MODUL 2: AI SEMANTIC EMBEDDING
 # =====================================================================
+# [REFERENSI PPT: SLIDE 4 - PENGUKURAN KEMIRIPAN & WAKTU]
+# Proses Embed: Mengubah teks menjadi representasi vektor numerik.
 def generate_embeddings(sentences, model_name):
     """Mengubah teks menjadi vektor embedding menggunakan pre-trained model AI."""
     print(f"Memuat Model AI: {model_name}")
@@ -258,12 +270,16 @@ def pair_key(account_a, account_b):
     return tuple(sorted([str(account_a), str(account_b)]))
 
 
+# [REFERENSI PPT: SLIDE 4 - PENGUKURAN KEMIRIPAN & WAKTU]
+# Implementasi formula s_time = exp(-0.001155 * delta_t) dan gabungan (weight = 0.5 s_text + 0.5 s_time)
 def calculate_edge_weight(s_text, delta_t, config):
     s_time = np.exp(-config["LAMBDA"] * delta_t)
     weight = (config["ALPHA"] * s_text) + ((1 - config["ALPHA"]) * s_time)
     return weight, s_time
 
 
+# [REFERENSI PPT: SLIDE 5 - KRITERIA PEMBENTUKAN EDGE]
+# Menerapkan 3 filter ketat: Unggahan Mandiri (Non-RT), Kemiripan Makna (s_text >= 0.65), Keserempakan Waktu (<= 30 menit).
 def extract_coordination_edges(df, embeddings, config):
     """Mengekstrak edge koordinasi berbasis semantic match dan shared-retweet."""
     print("\nMengekstrak jaringan koordinasi...")
@@ -389,6 +405,8 @@ def join_unique(values, limit=6):
     return " | ".join(cleaned)
 
 
+# [REFERENSI PPT: SLIDE 6 - RINGKASAN HUBUNGAN YANG TERDETEKSI]
+# Menggabungkan bukti mentah menjadi aggregated edges dan mendeteksi proporsi Semantic, Retweet, dan Campuran.
 def export_network_to_csv(edges_list, output_filename="political_edges.csv"):
     """Mengagregasi edge ganda sambil menyimpan bukti relasi koordinasi."""
     if not edges_list:
@@ -436,6 +454,8 @@ def export_network_to_csv(edges_list, output_filename="political_edges.csv"):
 # =====================================================================
 # MODUL 5: ANALISIS TEORI GRAF (NETWORKX)
 # =====================================================================
+# [REFERENSI PPT: SLIDE 7 - DETEKSI KOMUNITAS (CLUSTERING)]
+# Menjalankan algoritma Louvain untuk menemukan kluster dari graf yang terbentuk.
 def analyze_coordination_graph(csv_path, df, config=None):
     print("Memuat file jaringan koordinasi...")
     if not os.path.exists(csv_path):
@@ -625,6 +645,8 @@ def get_cluster_status(size, density, total_pair_matches, config):
     return score, "Rendah / cenderung organik"
 
 
+# [REFERENSI PPT: SLIDE 8 & SLIDE DETAIL - KLUSTER UNGGULAN & INTERPRETASI]
+# Menghitung Metrik Kluster: Jumlah Akun (Size), Kepadatan (Density), Edge (Bukti), dan memberi status koordinasi.
 def calculate_and_export_cluster_density(G, cluster_labels, output_filename, config=None):
     print("Menghitung metrik kepadatan dan bukti koordinasi kluster...")
     config = config or {}
