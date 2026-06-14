@@ -1,28 +1,23 @@
-# Hasil Analisis Koordinasi Narasi Politik di Twitter/X
+# Analisis Pola Penyebaran Narasi Politik pada Aplikasi X
 
-Dokumen ini merangkum hasil analisis koordinasi narasi politik di Twitter/X pada dataset capres 2024. Fokus utama analisis ini bukan untuk memberi label bahwa sebuah akun adalah bot, buzzer, atau pendukung kandidat tertentu, melainkan untuk membaca pola hubungan antarakun dari sisi kemiripan narasi dan kedekatan waktu unggahan.
+Dokumen ini menyajikan hasil analisis pola penyebaran narasi politik di platform X (Twitter) pada dataset percakapan Pilpres 2024. Fokus utama analisis ini adalah membaca **pola hubungan antarakun** berdasarkan kemiripan narasi dan kedekatan waktu unggahan—bukan untuk memberi label identitas tertentu kepada akun, seperti bot, buzzer, atau afiliasi politik.
 
-Dengan kata lain, istilah **koordinasi** dalam laporan ini harus dipahami sebagai pola graf: beberapa akun terhubung karena mengunggah teks yang mirip, dalam waktu yang berdekatan, atau karena melakukan retweet dari sumber yang sama. Analisis ini membaca pola perilaku di data, bukan motif asli pemilik akun.
+Istilah **koordinasi** dalam laporan ini merujuk pada pola graf: sekelompok akun terhubung karena mengunggah teks yang mirip dalam rentang waktu berdekatan, atau karena me-retweet dari sumber yang sama. Analisis ini membaca pola perilaku di data, **bukan** motif atau identitas asli pemilik akun.
 
-Angka dan interpretasi dalam dokumen ini berasal dari output proyek yang sudah tersedia, terutama:
+Seluruh angka dan interpretasi dalam dokumen ini berasal dari output proyek yang sudah tersedia, terutama:
 
 - `cleaned_data.csv`
 - `data_audit.csv`
 - `relation.csv`
 - `relation_evidence.csv`
 - `cluster_density_report.csv`
-- `visualisasi_st.html`
-- `visualisasi_non_rt_light.html`
+- `visualisasi_finale.html`
+
+---
 
 ## 1. Gambaran Sumber Data
 
-Data yang dianalisis berada di folder:
-
-```text
-data/DE-sample-X-capres2024/DE-sample-X-capres2024/
-```
-
-Ada tiga file JSON utama yang dipakai. Masing-masing file mewakili query terhadap salah satu kandidat.
+Data berasal dari tiga file JSON yang masing-masing mewakili satu query kandidat:
 
 | File | Label Query |
 |---|---|
@@ -30,483 +25,521 @@ Ada tiga file JSON utama yang dipakai. Masing-masing file mewakili query terhada
 | `data-twit-ganjar.json` | `ganjar` |
 | `data-twit-prabowo.json` | `prabowo` |
 
-Perlu dicatat bahwa pipeline tidak melakukan crawling Twitter/X secara langsung saat script dijalankan. Script hanya membaca file JSON yang sudah tersedia di folder data. Jadi, hasil analisis ini berlaku untuk dataset tersebut, bukan untuk keseluruhan percakapan politik di Twitter/X.
+Perlu dicatat bahwa pipeline tidak melakukan crawling secara langsung. Script hanya membaca file JSON yang sudah tersedia di folder data. Oleh karena itu, hasil analisis ini berlaku untuk dataset tersebut, bukan untuk keseluruhan percakapan politik di platform X.
+
+---
 
 ## 2. Ringkasan Dataset
 
-Dataset berisi **1002 tweet** dari **584 akun unik**. Semua tweet berada dalam rentang waktu yang cukup pendek, yaitu dari **2024-01-04 17:59:59 UTC** sampai **2024-01-04 18:21:20 UTC**. Artinya, seluruh data yang dianalisis hanya mencakup sekitar 21 menit percakapan.
+Dataset berisi **1.002 tweet** dari **584 akun unik**, seluruhnya dalam rentang waktu sekitar **21 menit** (2024-01-04, pukul 17:59–18:21 UTC).
 
 | Metrik | Nilai |
 |---|---:|
-| Total baris tweet | 1002 |
+| Total tweet | 1.002 |
 | Akun unik | 584 |
-| Rentang waktu awal | 2024-01-04 17:59:59 UTC |
-| Rentang waktu akhir | 2024-01-04 18:21:20 UTC |
-| Retweet rows | 563 |
-| Rasio retweet | 0.5619 |
-| Reply/mention rows | 661 |
-| Empty cleaned content | 0 |
-| Bahasa | 1002 baris `id` |
-| Tipe | 1002 baris `twit` |
+| Waktu awal | 2024-01-04 17:59:59 UTC |
+| Waktu akhir | 2024-01-04 18:21:20 UTC |
+| Jumlah retweet | 563 |
+| Rasio retweet | 56,2% |
+| Reply / mention | 661 |
 
-Secara jumlah baris, dataset terlihat seimbang karena setiap query kandidat memiliki 334 tweet. Namun, ketika dilihat lebih dalam, komposisi retweet-nya tidak seimbang. Query `anies` dan `prabowo` didominasi retweet, sedangkan query `ganjar` jauh lebih banyak berisi tweet non-retweet.
+Secara jumlah, setiap query menyumbang 334 tweet. Namun, komposisi retweet antarquery tidak seimbang:
 
-| Query | Jumlah Tweet | Akun Unik | Retweet | Reply/Mention |
+| Query | Tweet | Akun Unik | Retweet | Reply/Mention |
 |---|---:|---:|---:|---:|
 | `anies` | 334 | 187 | 302 | 325 |
 | `ganjar` | 334 | 255 | 34 | 54 |
 | `prabowo` | 334 | 199 | 227 | 282 |
 
-Perbedaan ini penting karena retweet secara alami membuat banyak teks menjadi sama atau sangat mirip. Jika retweet dicampur begitu saja dengan analisis kemiripan narasi, kluster bisa terlihat sangat kuat padahal penyebab utamanya hanya karena banyak akun me-retweet unggahan yang sama. Karena itu, proyek ini memisahkan hubungan berbasis retweet dari hubungan berbasis kemiripan narasi non-retweet.
+Query `anies` dan `prabowo` didominasi retweet, sementara query `ganjar` jauh lebih banyak berisi tweet non-retweet. Perbedaan ini penting karena retweet secara alami menghasilkan teks yang identik—sehingga jika dicampur dengan analisis kemiripan narasi, kluster bisa terlihat sangat kuat padahal penyebab utamanya hanya karena banyak akun me-retweet unggahan yang sama. Itulah alasan proyek ini memisahkan kedua jenis hubungan tersebut.
 
-## 3. Cara Data Dibaca dan Disiapkan
+---
 
-Pipeline membaca file dengan pola:
+## 3. Cara Data Disiapkan
 
-```text
-data-twit-*.json
-```
+Pipeline membaca semua file dengan pola `data-twit-*.json`, lalu menggabungkan tweet dari ketiga file dan mengurutkannya berdasarkan waktu unggah (`date_created`). Pengurutan ini penting karena analisis tidak hanya melihat kemiripan teks, tetapi juga memperhitungkan kedekatan waktu antarunggahan.
 
-Dari setiap file, script mempertahankan beberapa kolom penting seperti nama akun, isi tweet, waktu unggah, ID tweet, penulis, metadata JSON, jumlah retweet, informasi reply, tipe, dan bahasa. Selain itu, script juga menambahkan dua informasi baru: `query_candidate`, yaitu label kandidat yang diambil dari nama file, serta `source_file`, yaitu nama file asal tweet.
-
-Setelah semua data digabung, tweet diurutkan berdasarkan `date_created`. Pengurutan ini penting karena analisis tidak hanya melihat kemiripan teks, tetapi juga memperhitungkan seberapa dekat waktu antarunggahan.
-
-## 4. Preprocessing Teks
-
-Sebelum dihitung kemiripannya, teks tweet dibersihkan terlebih dahulu. Proses ini menghasilkan dua versi teks: `cleaned_content` dan `topic_content`.
+Teks tweet kemudian dibersihkan menjadi dua versi:
 
 | Kolom | Fungsi |
 |---|---|
-| `cleaned_content` | Teks untuk embedding dan similarity |
-| `topic_content` | Teks untuk TF-IDF keyword/topik |
+| `cleaned_content` | Digunakan untuk menghitung kemiripan semantik (embedding) |
+| `topic_content` | Digunakan untuk mengekstrak kata kunci dan topik kluster |
 
-`cleaned_content` dipakai untuk menghitung kemiripan semantik. Pada tahap ini, script menghapus marker `RT`, pola reply seperti `[RE username]`, URL, dan spasi berlebih. Tujuannya agar model embedding lebih fokus pada isi narasi, bukan pada format teknis tweet.
+`cleaned_content` menghapus marker `RT`, pola reply seperti `[RE username]`, URL, dan spasi berlebih, agar model embedding lebih fokus pada isi narasi. `topic_content` dibersihkan lebih ketat lagi: mention dihapus, karakter non-alfanumerik dibuang, dan token pendek dihilangkan, sehingga URL dan mention tidak mendominasi hasil kata kunci.
 
-Sementara itu, `topic_content` dipakai untuk membaca kata kunci atau topik kluster. Versi ini lebih dibersihkan lagi: mention dihapus, tanda `#` dihilangkan tetapi kata hashtag tetap dipertahankan, karakter non-alfanumerik dibuang, dan token yang terlalu pendek dihapus.
+---
 
-Dengan pembersihan seperti ini, URL dan mention tidak mendominasi hasil keyword. Retweet juga tidak dianggap berbeda hanya karena memiliki marker `RT`. Hasil akhirnya adalah teks yang lebih representatif untuk membaca isi narasi.
+## 4. Pengukuran Kemiripan dan Kedekatan Waktu
 
-## 5. Pemisahan Retweet dari Narasi Non-RT
+Untuk mengukur kemiripan isi narasi, proyek ini menggunakan model embedding multilingual:
 
-Salah satu bagian paling penting dalam analisis ini adalah deteksi retweet. Retweet dideteksi dari beberapa sumber: metadata `contentJson.rt_status`, kolom `rt_source`, `rt_source_id`, marker teks `[RE username]` sebagai fallback, dan teks yang diawali `RT`.
-
-Dari proses ini, script menghasilkan kolom seperti:
-
-- `is_retweet`
-- `rt_source`
-- `rt_source_id`
-- `is_reply_or_mention`
-
-Pemisahan ini krusial. Dua akun yang me-retweet sumber yang sama memang dapat terlihat sangat mirip, tetapi kemiripan itu berbeda maknanya dari dua akun yang menulis tweet non-retweet dengan narasi yang sama atau hampir sama. Karena itu, analisis membedakan **shared-retweet** dari **semantic coordination non-RT**.
-
-## 6. Embedding, Similarity, dan Kedekatan Waktu
-
-Untuk mengukur kemiripan isi tweet, proyek ini menggunakan model embedding:
-
-```text
+```
 symanto/sn-xlm-roberta-base-snli-mnli-anli-xnli
 ```
 
-Setiap `cleaned_content` diubah menjadi vektor embedding. Setelah itu, kemiripan antartweet dihitung menggunakan cosine similarity. Dalam output, nilai ini disebut `s_text`. Nilai yang mendekati 1 menunjukkan teks yang sangat mirip secara semantik. Jika nilainya 1, biasanya teks tersebut identik atau hampir identik.
+Setiap `cleaned_content` diubah menjadi representasi vektor. Kemiripan antartweet dihitung menggunakan *cosine similarity*, yang disimpan sebagai `s_text`. Nilai mendekati 1,0 menunjukkan narasi yang sangat mirip secara semantik.
 
-Selain teks, waktu unggah juga dihitung. Untuk setiap pasangan tweet, script menghitung selisih waktu absolut dalam detik:
+Selain kemiripan teks, selisih waktu unggah juga diperhitungkan:
 
-```text
-delta_t = selisih waktu absolut dalam detik
-s_time = exp(-LAMBDA * delta_t)
+```
+s_time = exp(−0.001155 × delta_t)
 ```
 
-Konfigurasi yang dipakai adalah:
+Semakin kecil jeda waktu (`delta_t` dalam detik), semakin tinggi skor waktu (`s_time`). Bobot akhir setiap hubungan (edge) dihitung sebagai rata-rata tertimbang dari kedua skor:
 
-```text
-LAMBDA = 0.001155
+```
+weight = 0.5 × s_text + 0.5 × s_time
 ```
 
-Semakin kecil `delta_t`, semakin tinggi `s_time`. Jika dua tweet muncul pada detik yang sama, skor waktunya sangat tinggi. Jika jedanya hanya beberapa detik, hubungan waktunya masih kuat. Jika jedanya mendekati 30 menit, pasangan itu masih bisa lolos batas waktu, tetapi skor waktunya menurun.
+Artinya, setiap hubungan antarakun mencerminkan dua dimensi sekaligus: **seberapa mirip narasinya** dan **seberapa dekat kemunculannya**.
 
-Bobot akhir edge dihitung dengan formula:
+---
 
-```text
-weight = (ALPHA * s_text) + ((1 - ALPHA) * s_time)
-```
+## 5. Dua Jenis Hubungan Antarakun
 
-Dengan konfigurasi:
+Graf dalam analisis ini memiliki dua jenis edge:
 
-```text
-ALPHA = 0.5
-```
+**Edge semantic** terbentuk jika dua tweet bukan retweet, memiliki kemiripan teks minimal 0,65, dan diunggah dalam selisih waktu maksimal 1.800 detik (30 menit). Jenis edge ini mencerminkan kemiripan narasi yang ditulis oleh akun sendiri, bukan hasil retweet.
 
-Artinya, bobot edge menyeimbangkan dua hal: seberapa mirip narasinya dan seberapa dekat waktu kemunculannya.
+**Edge retweet** terbentuk jika dua tweet sama-sama merupakan retweet dari sumber yang sama, dalam rentang waktu maksimal 1.800 detik. Jenis edge ini mencerminkan pola berbagi konten (shared retweet), bukan kesamaan narasi asli.
 
-## 7. Jenis Hubungan Antarakun
+Pemisahan ini membuat interpretasi lebih aman. Kluster yang kuat karena retweet tidak bisa langsung disamakan dengan kluster yang kuat karena narasi non-retweet yang mirip.
 
-Dalam graf, ada dua jenis edge utama.
+---
 
-Pertama, **edge semantic**. Edge ini terbentuk jika dua tweet bukan retweet, memiliki kemiripan teks minimal `0.65`, dan muncul dalam jarak waktu maksimal `1800 detik`. Karena `INCLUDE_RETWEETS_IN_SEMANTIC = False`, retweet tidak ikut membentuk edge semantic. Jadi, edge jenis ini menunjukkan kemiripan narasi non-retweet.
+## 6. Ringkasan Hubungan yang Terdeteksi
 
-Kedua, **edge retweet**. Edge ini terbentuk jika dua tweet sama-sama retweet, memiliki sumber retweet yang sama, dan muncul dalam rentang waktu maksimal `1800 detik`. Jika `rt_source_id` kosong, script memakai `rt_source` sebagai fallback. Edge ini menunjukkan pola shared-retweet, bukan kesamaan narasi asli yang ditulis akun.
+Dari `relation.csv`, terdapat **2.357 hubungan teragregasi** yang berasal dari **2.816 bukti mentah**:
 
-Pembedaan ini membuat interpretasi menjadi lebih aman. Kluster yang kuat karena retweet tidak dibaca sama dengan kluster yang kuat karena tweet non-RT yang mirip.
-
-## 8. Ringkasan Edge yang Terbentuk
-
-Dari `relation.csv`, terdapat **2357 edge teragregasi** yang berasal dari **2816 evidence mentah**. Mayoritas edge adalah edge semantic.
-
-| Metrik | Nilai |
+| Tipe Edge | Jumlah |
 |---|---:|
-| Edge teragregasi | 2357 |
-| Evidence mentah | 2816 |
-| Edge semantic | 1929 |
-| Edge retweet | 422 |
-| Edge campuran semantic + retweet | 6 |
+| Edge semantic | 1.929 (81,8%) |
+| Edge retweet | 422 (17,9%) |
+| Edge campuran (semantic + retweet) | 6 (0,3%) |
 
-Jika dilihat dari `relation_evidence.csv`, evidence semantic berjumlah 2192, sedangkan evidence retweet berjumlah 624.
+Mayoritas hubungan yang terbentuk adalah hubungan semantic, bukan retweet. Ini menunjukkan bahwa banyak pasangan akun terhubung karena kemiripan narasi non-retweet, bukan semata karena membagikan konten yang sama.
 
-| Tipe Evidence | Jumlah |
-|---|---:|
-| `semantic` | 2192 |
-| `retweet` | 624 |
-
-Secara umum, edge yang terbentuk memiliki bobot cukup tinggi. Rata-rata `Weight` adalah 0.8903 dan median 0.8914. Rata-rata similarity teks juga tinggi, yaitu 0.8495. Median jeda minimum hanya 12 detik, menunjukkan banyak pasangan tweet muncul dalam waktu yang sangat dekat.
+Secara keseluruhan, hubungan yang terdeteksi memiliki bobot cukup tinggi:
 
 | Metrik | Rata-rata | Median | Min | Max |
 |---|---:|---:|---:|---:|
-| `Weight` | 0.8903 | 0.8914 | 0.4982 | 1.0000 |
-| `Edge_Count` | 1.1947 | 1.0000 | 1 | 46 |
-| `Avg_Text_Similarity` | 0.8495 | 0.8526 | 0.6502 | 1.0000 |
-| `Avg_Time_Score` | 0.9312 | 0.9862 | 0.2863 | 1.0000 |
-| `Min_Time_Delta_Seconds` | 68.42 | 12.00 | 0 | 1083 |
+| `Weight` | 0,8903 | 0,8914 | 0,4982 | 1,0000 |
+| `Avg_Text_Similarity` | 0,8495 | 0,8526 | 0,6502 | 1,0000 |
+| `Avg_Time_Score` | 0,9312 | 0,9862 | 0,2863 | 1,0000 |
+| `Min_Time_Delta_Seconds` | 68,42 | 12,00 | 0 | 1.083 |
 
-Namun, mayoritas edge hanya memiliki `Edge_Count = 1`. Karena itu, dashboard Non-RT memakai backbone tambahan agar visualisasi tidak terlalu melebar akibat edge yang lemah atau terlalu banyak.
+Nilai median jeda waktu minimum sebesar **12 detik** merupakan temuan yang menonjol. Artinya, setidaknya separuh dari pasangan akun yang terhubung mengunggah narasi serupa dalam waktu kurang dari 15 detik satu sama lain.
 
-## 9. Graf Umum dan Deteksi Komunitas
+---
 
-Graf umum dibangun dari `relation.csv`, sehingga memuat edge semantic, edge retweet, dan edge campuran. Community detection dilakukan menggunakan Louvain dengan konfigurasi:
+## 7. Deteksi Komunitas: 41 Kluster Teridentifikasi
 
-```text
+Graf umum (mencakup edge semantic, retweet, dan campuran) dianalisis menggunakan algoritma Louvain dengan parameter berikut:
+
+```
 LOUVAIN_RESOLUTION = 2.0
 RANDOM_SEED = 42
 ```
 
-Dari `cluster_density_report.csv`, terdeteksi **41 kluster**. Status kluster ditentukan dari struktur graf, bukan dari identitas akun.
+Hasilnya, terdeteksi **41 kluster** dengan distribusi status sebagai berikut:
 
 | Status | Jumlah Kluster |
 |---|---:|
-| Sangat mencurigakan | 18 |
-| Perlu investigasi | 4 |
-| Indikasi lemah (kluster kecil/minim bukti) | 18 |
-| Rendah / cenderung organik | 1 |
+| Koordinasi kuat | 18 |
+| Perlu investigasi lebih lanjut | 4 |
+| Indikasi lemah (kluster kecil / bukti minim) | 18 |
+| Pola rendah / cenderung organik | 1 |
 
-Skor koordinasi dihitung dengan formula:
+Status kluster ditentukan berdasarkan **skor koordinasi**, yaitu:
 
-```text
-Coordination_Score = density * log2(size + 1)
+```
+Coordination_Score = density × log₂(size + 1)
 ```
 
-Formula ini menggabungkan dua hal: seberapa padat hubungan dalam kluster dan seberapa besar ukuran klusternya. Kluster kecil bisa memiliki density 1.0, tetapi skornya tetap dibatasi oleh ukurannya. Sebaliknya, kluster besar akan lebih kuat jika hubungan internalnya juga padat.
+Formula ini menggabungkan dua dimensi: **kepadatan hubungan internal** (density) dan **ukuran kluster** (size). Kluster kecil bisa memiliki density 1,0, tetapi skornya tetap terbatas oleh ukurannya. Sebaliknya, kluster besar akan mendapat skor tinggi hanya jika hubungan internalnya juga padat.
 
-## 10. Kluster Teratas pada Graf Umum
+---
 
-Berikut beberapa kluster teratas dari `cluster_density_report.csv`.
+## 8. Kluster Teratas pada Graf Umum
 
-| Cluster | Akun | Density | Evidence | RT Edge | Semantic Edge | Skor | Status | Topik |
-|---:|---:|---:|---:|---:|---:|---:|---|---|
-| 5 | 41 | 0.86463 | 709 | 0 | 709 | 4.66238 | Sangat mencurigakan | koperasi, perbankan, UMKM, kredit |
-| 11 | 18 | 0.95425 | 146 | 0 | 146 | 4.05358 | Sangat mencurigakan | kesehatan, mental, puskesmas |
-| 6 | 13 | 1.00000 | 78 | 0 | 78 | 3.80735 | Sangat mencurigakan | nelayan, beban, kredit macet |
-| 1 | 11 | 1.00000 | 186 | 55 | 6 | 3.58496 | Sangat mencurigakan | deklarasi pemuda, Prabowo-Gibran |
-| 12 | 27 | 0.68376 | 240 | 0 | 240 | 3.28708 | Sangat mencurigakan | count down, Februari |
-| 9 | 8 | 1.00000 | 28 | 0 | 28 | 3.16993 | Sangat mencurigakan | norma, membentuk, direspons |
-| 20 | 6 | 1.00000 | 15 | 15 | 0 | 2.80735 | Sangat mencurigakan | sumber RT `tomlembong` |
-| 15 | 6 | 1.00000 | 15 | 15 | 0 | 2.80735 | Sangat mencurigakan | sumber RT `dapitnih` |
+Berikut beberapa kluster dengan skor koordinasi tertinggi:
 
-Dari tabel ini terlihat bahwa beberapa kluster kuat, seperti cluster 5, 11, 6, 12, dan 9, didominasi oleh edge semantic. Artinya, hubungan antarakunnya terutama terbentuk karena kemiripan narasi non-retweet.
+| Cluster | Akun | Density | Evidence | RT Edge | Semantic Edge | Skor | Fokus Narasi |
+|---:|---:|---:|---:|---:|---:|---:|---|
+| 5 | 41 | 0,865 | 709 | 0 | 709 | 4,662 | Koperasi, perbankan, UMKM, kredit |
+| 11 | 18 | 0,954 | 146 | 0 | 146 | 4,054 | Kesehatan mental, puskesmas |
+| 6 | 13 | 1,000 | 78 | 0 | 78 | 3,807 | Nelayan, kredit macet |
+| 1 | 11 | 1,000 | 186 | 55 | 6 | 3,585 | Deklarasi pemuda, Prabowo-Gibran |
+| 12 | 27 | 0,684 | 240 | 0 | 240 | 3,287 | Count down, Februari |
+| 9 | 8 | 1,000 | 28 | 0 | 28 | 3,170 | Norma, lembaga, direspons |
+| 20 | 6 | 1,000 | 15 | 15 | 0 | 2,807 | Shared RT: `tomlembong` |
+| 15 | 6 | 1,000 | 15 | 15 | 0 | 2,807 | Shared RT: `dapitnih` |
 
-Sebaliknya, cluster 1, 20, dan 15 mengandung retweet edge yang kuat. Kluster seperti ini tetap penting, tetapi harus dibaca sebagai pola shared-retweet. Klaim yang aman bukan bahwa akun-akun tersebut menulis narasi asli yang sama, melainkan bahwa mereka me-retweet sumber yang sama dalam waktu berdekatan.
+Kluster 5, 11, 6, 12, dan 9 sepenuhnya didominasi edge semantic—artinya, hubungan antarakunnya terbentuk bukan karena retweet, melainkan karena kemiripan narasi yang ditulis sendiri. Kluster 20 dan 15, sebaliknya, sepenuhnya berbasis shared retweet, sehingga harus dibaca sebagai pola amplifikasi konten dari sumber tunggal.
 
-## 11. Contoh Kluster Shared-Retweet
+---
 
-Salah satu contoh kluster retweet pada dashboard umum adalah kluster yang membahas deklarasi dukungan Prabowo-Gibran.
+## 9. Contoh Kluster Shared Retweet: Deklarasi Pemuda Prabowo-Gibran
+
+Sebagai ilustrasi kluster berbasis retweet, kluster 1 pada graf umum menjadi contoh yang informatif:
 
 | Metrik | Nilai |
 |---|---|
-| Cluster | 2 pada dashboard umum |
 | Jumlah akun | 11 |
-| Density | 1.0 |
+| Density | 1,000 |
 | Evidence | 186 |
 | RT edge | 55 |
 | Semantic edge | 6 |
 | Sumber RT dominan | `AzzrielAzaryahu` |
-| Fokus narasi | Dominan membahas Prabowo-Gibran |
-| Keyword | menangseputaran, pemuda, kabupaten, deklarasi, serang |
+| Fokus narasi | Deklarasi dukungan pemuda Kabupaten Serang untuk Prabowo-Gibran |
+| Keyword | pemuda, kabupaten, deklarasi, serang |
 
-Beberapa akun sentral yang muncul antara lain:
+Kekuatan kluster ini sebagian besar berasal dari shared retweet. Interpretasi yang tepat adalah: sekelompok akun yang me-retweet unggahan yang sama dalam waktu berdekatan—bukan akun-akun yang secara mandiri menulis narasi orisinal yang serupa.
 
-| Akun | Tipe Tweet di Card | Rasio RT | Contoh Narasi |
-|---|---|---:|---|
-| `ChairudinN6548` | Retweet | 0.75 | "Pemuda Kabupaten Serang Deklarasi Dukung Prabowo-Gibran..." |
-| `doddy_h4312` | Retweet | 0.75 | "Pemuda Kabupaten Serang Deklarasi Dukung Prabowo-Gibran..." |
-| `Herlina_Muachhh` | Retweet | 0.75 | "Pemuda Kabupaten Serang Deklarasi Dukung Prabowo-Gibran..." |
-| `SahrulAmzi` | Retweet | 1.00 | "Pemuda Kabupaten Serang Deklarasi Dukung Prabowo-Gibran..." |
-| `mehuli_ginting` | Retweet | 1.00 | "Pemuda Kabupaten Serang Deklarasi Dukung Prabowo-Gibran..." |
+---
 
-Kluster ini kuat secara graf, tetapi sebagian besar kekuatannya berasal dari retweet. Karena itu, interpretasi yang tepat adalah: terdapat pola shared-retweet berdekatan waktu pada narasi deklarasi dukungan Prabowo-Gibran. Kluster ini tidak boleh langsung disamakan dengan koordinasi narasi non-RT.
+## 10. Dashboard Non-Retweet: Analisis Koordinasi Narasi yang Lebih Bersih
 
-## 12. Dashboard Non-RT sebagai Analisis yang Lebih Bersih
+Untuk memisahkan koordinasi narasi dari pengaruh retweet, proyek ini membangun dashboard khusus (`visualisasi_non_rt_light.html`) yang hanya menggunakan **edge semantic non-retweet**. Jika sebuah kluster muncul di dashboard ini, hubungan antarakunnya terbentuk dari kemiripan teks yang ditulis sendiri dan kedekatan waktu—bukan karena akun-akun tersebut me-retweet sumber yang sama.
 
-Untuk membaca koordinasi narasi yang tidak didorong oleh retweet, proyek ini membuat dashboard khusus:
-
-```text
-visualisasi_non_rt_light.html
-```
-
-Dashboard ini hanya memakai evidence dengan:
-
-```text
-edge_type = semantic
-```
-
-Dengan kata lain, retweet tidak dipakai untuk membentuk kluster. Jika suatu kluster muncul di dashboard ini, maka hubungan antarakunnya muncul karena kemiripan teks non-retweet dan kedekatan waktu, bukan karena akun-akun tersebut me-retweet sumber yang sama.
-
-Backbone Non-RT memakai konfigurasi berikut:
+Dashboard Non-RT menggunakan filter backbone yang lebih ketat:
 
 | Parameter | Nilai |
 |---|---:|
-| Minimum average similarity | 0.75 |
-| Maksimum minimum time delta | 300 detik |
-| Louvain resolution | 6.5 |
+| Minimum rata-rata similarity | 0,75 |
+| Maksimum jeda waktu minimum | 300 detik |
+| Resolusi Louvain | 6,5 |
 
-Hasilnya:
+Hasil setelah backbone:
 
 | Metrik | Nilai |
 |---|---:|
-| Edge semantic awal | 1935 |
-| Edge setelah backbone | 1259 |
+| Edge semantic awal | 1.935 |
+| Edge setelah backbone | 1.259 |
 | Edge visual internal kluster | 391 |
 | Node tampil | 148 |
 | Kluster tampil | 23 |
-| Total RT edge | 0 |
-| Node `is_retweet=true` | 0 |
+| RT edge dalam kluster | 0 |
+| Node dengan status retweet | 0 |
 
-Dashboard Non-RT menjadi basis paling bersih untuk membahas koordinasi narasi non-retweet. Alasan sebuah kluster terbentuk dapat dibaca dari kombinasi similarity teks, kedekatan waktu, density, dan contoh pasangan edge.
+Dashboard ini menjadi basis paling bersih untuk mendiskusikan koordinasi narasi non-retweet.
 
-## 13. Daftar Kluster pada Dashboard Non-RT
+---
 
-Cluster ID pada tabel ini berasal dari `visualisasi_non_rt_light.html`. ID ini tidak harus sama dengan ID pada `cluster_density_report.csv`, karena dashboard Non-RT memakai backbone dan resolusi Louvain yang berbeda.
+## 11. Daftar Kluster pada Dashboard Non-Retweet
 
-| Cluster | Akun | Density | Skor | Evidence | Avg Similarity | Median Jeda | Status | Fokus Narasi | Keyword |
-|---:|---:|---:|---:|---:|---:|---|---|---|---|
-| 26 | 13 | 1.0000 | 3.8074 | 78 | 1.000 | 6 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | beban, ringankan, macet, melawan, sendiri |
-| 25 | 8 | 1.0000 | 3.1699 | 28 | 1.000 | 9 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | lembaga, seksual, direspons, dihindari, kekerasan |
-| 35 | 7 | 1.0000 | 3.0000 | 21 | 1.000 | 1 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | pentingnya, penyuluhan, desa |
-| 63 | 17 | 0.6912 | 2.8822 | 94 | 0.915 | 4 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | mental, kesehatan, dampak |
-| 17 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 13 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | kepentingan, kebebasan, berpendapat |
-| 29 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 11 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | cawapres, menuju, persembahkan, kesejahteraan |
-| 34 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 17 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | tancap, gas, luar, biasa |
-| 69 | 5 | 1.0000 | 2.5850 | 10 | 1.000 | 14 detik | Koordinasi Kuat | Dominan membahas Ganjar-Mahfud | hari susah, bahagia |
-| 73 | 7 | 0.4286 | 1.2857 | 12 | 0.802 | 2.3 menit | Perlu Investigasi | Dominan membahas Ganjar-Mahfud | ganjarmahfud, mahfudlebihbaik |
-| 72 | 16 | 0.3000 | 1.2262 | 43 | 0.808 | 46 detik | Perlu Investigasi | Dominan membahas Ganjar-Mahfud | ganjarmahfud, mahfudlebihbaik |
-| 1 | 19 | 0.2281 | 0.9857 | 60 | 0.795 | 1.1 menit | Perlu Investigasi | Dominan membahas Ganjar-Mahfud | ganjarmahfud, mahfudlebihbaik |
-| 2 | 4 | 1.0000 | 2.3219 | 6 | 1.000 | 12 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | menu, restoran |
-| 23 | 4 | 1.0000 | 2.3219 | 6 | 1.000 | 6 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | jabatan, negeri, dedikasi |
-| 24 | 4 | 1.0000 | 2.3219 | 6 | 1.000 | 0 detik | Indikasi Lemah | Dominan membahas Prabowo-Gibran | pemuda, dukung, deklarasi |
-| 59 | 4 | 1.0000 | 2.3219 | 6 | 1.000 | 7 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | democratic, indonesian |
-| 30 | 3 | 1.0000 | 2.0000 | 3 | 1.000 | 11 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | democracy, people |
-| 36 | 3 | 1.0000 | 2.0000 | 3 | 1.000 | 5 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | ganjartindakannyata |
-| 44 | 3 | 1.0000 | 2.0000 | 3 | 1.000 | 4 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | pemilihan |
-| 57 | 3 | 1.0000 | 2.0000 | 3 | 1.000 | 6 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | presidential election |
-| 62 | 3 | 1.0000 | 2.0000 | 3 | 0.969 | 5 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | kontrak, kerja |
-| 0 | 3 | 0.6667 | 1.3333 | 92 | 0.838 | 2.8 menit | Indikasi Lemah | Dominan membahas Prabowo-Gibran | Demokrat, AHY, Prabowo |
-| 76 | 3 | 0.6667 | 1.3333 | 2 | 0.812 | 58 detik | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | terima kasih |
-| 75 | 4 | 0.5000 | 1.1610 | 3 | 0.827 | 2.3 menit | Indikasi Lemah | Dominan membahas Ganjar-Mahfud | keluarga, anak |
+Berikut seluruh kluster yang terdeteksi pada dashboard Non-RT:
 
-Dari tabel ini, pola yang paling menonjol adalah dominasi kluster Non-RT yang membahas Ganjar-Mahfud. Banyak di antaranya memiliki similarity 1.0 dan median jeda hanya beberapa detik. Ini menunjukkan bahwa sejumlah akun mengunggah narasi yang sama atau sangat mirip dalam waktu yang sangat dekat.
+| Cluster | Akun | Density | Skor | Avg Similarity | Median Jeda | Status | Fokus Narasi |
+|---:|---:|---:|---:|---:|---|---|---|
+| 26 | 13 | 1,000 | 3,807 | 1,000 | 6 detik | Koordinasi Kuat | Ganjar-Mahfud: nelayan, kredit macet |
+| 25 | 8 | 1,000 | 3,170 | 1,000 | 9 detik | Koordinasi Kuat | Ganjar-Mahfud: legislasi, kekerasan seksual |
+| 35 | 7 | 1,000 | 3,000 | 1,000 | 1 detik | Koordinasi Kuat | Ganjar-Mahfud: penyuluhan, desa |
+| 63 | 17 | 0,691 | 2,882 | 0,915 | 4 detik | Koordinasi Kuat | Ganjar-Mahfud: kesehatan mental, puskesmas |
+| 17 | 5 | 1,000 | 2,585 | 1,000 | 13 detik | Koordinasi Kuat | Ganjar-Mahfud: kepentingan rakyat, kebebasan berpendapat |
+| 29 | 5 | 1,000 | 2,585 | 1,000 | 11 detik | Koordinasi Kuat | Ganjar-Mahfud: kredit perbankan, koperasi |
+| 34 | 5 | 1,000 | 2,585 | 1,000 | 17 detik | Koordinasi Kuat | Ganjar-Mahfud: kredit perbankan, UMKM |
+| 69 | 5 | 1,000 | 2,585 | 1,000 | 14 detik | Koordinasi Kuat | Ganjar-Mahfud: hari susah, bahagia |
+| 73 | 7 | 0,429 | 1,286 | 0,802 | 2,3 menit | Perlu Investigasi | Ganjar-Mahfud: ganjarmahfud, mahfudlebihbaik |
+| 72 | 16 | 0,300 | 1,226 | 0,808 | 46 detik | Perlu Investigasi | Ganjar-Mahfud: ganjarmahfud, mahfudlebihbaik |
+| 1 | 19 | 0,228 | 0,986 | 0,795 | 1,1 menit | Perlu Investigasi | Ganjar-Mahfud: ganjarmahfud, mahfudlebihbaik |
+| 2 | 4 | 1,000 | 2,322 | 1,000 | 12 detik | Indikasi Lemah | Ganjar-Mahfud: menu, restoran |
+| 23 | 4 | 1,000 | 2,322 | 1,000 | 6 detik | Indikasi Lemah | Ganjar-Mahfud: jabatan, dedikasi |
+| 24 | 4 | 1,000 | 2,322 | 1,000 | 0 detik | Indikasi Lemah | Prabowo-Gibran: pemuda, deklarasi |
+| 59 | 4 | 1,000 | 2,322 | 1,000 | 7 detik | Indikasi Lemah | Ganjar-Mahfud: democratic, indonesian |
+| 30 | 3 | 1,000 | 2,000 | 1,000 | 11 detik | Indikasi Lemah | Ganjar-Mahfud: democracy, people |
+| 36 | 3 | 1,000 | 2,000 | 1,000 | 5 detik | Indikasi Lemah | Ganjar-Mahfud: ganjartindakannyata |
+| 44 | 3 | 1,000 | 2,000 | 1,000 | 4 detik | Indikasi Lemah | Ganjar-Mahfud: pemilihan |
+| 57 | 3 | 1,000 | 2,000 | 1,000 | 6 detik | Indikasi Lemah | Ganjar-Mahfud: presidential election |
+| 62 | 3 | 1,000 | 2,000 | 0,969 | 5 detik | Indikasi Lemah | Ganjar-Mahfud: kontrak, kerja |
+| 0 | 3 | 0,667 | 1,333 | 0,838 | 2,8 menit | Indikasi Lemah | Prabowo-Gibran: Demokrat, AHY |
+| 76 | 3 | 0,667 | 1,333 | 0,812 | 58 detik | Indikasi Lemah | Ganjar-Mahfud: terima kasih |
+| 75 | 4 | 0,500 | 1,161 | 0,827 | 2,3 menit | Indikasi Lemah | Ganjar-Mahfud: keluarga, anak |
 
-Namun, ukuran kluster tetap perlu diperhatikan. Beberapa kluster memang sangat padat, tetapi hanya berisi 3 sampai 5 akun. Kluster seperti ini kuat secara pola internal, tetapi tidak boleh digeneralisasi terlalu luas.
+**Pola yang paling menonjol:** dari 23 kluster pada dashboard Non-RT, mayoritas besar membahas narasi yang berkaitan dengan Ganjar-Mahfud. Banyak kluster di antaranya mencatat similarity sempurna (1,000) dengan median jeda hanya beberapa detik—menunjukkan bahwa sejumlah akun mengunggah narasi yang sama atau sangat mirip secara hampir bersamaan, tanpa melalui mekanisme retweet.
 
-## 14. Interpretasi Detail Kluster Non-RT Terkuat
+Perlu dicatat bahwa beberapa kluster berukuran kecil (3–5 akun). Meskipun kuat secara struktur internal, hasil dari kluster kecil tidak dapat digeneralisasi terlalu luas.
 
-Bagian ini membahas beberapa kluster paling kuat pada dashboard Non-RT. Karena retweet sudah dikeluarkan dari pembentukan kluster, bukti yang dibahas di sini adalah bukti semantic non-RT.
+---
 
-### 14.1 Cluster 26: Narasi Nelayan dan Kredit Macet
+## 12. Analisis Kluster Non-Retweet Terkuat
 
-Cluster 26 berisi 13 akun dengan density 1.0000, skor 3.8074, dan 78 evidence semantic. Rata-rata similarity-nya 1.000, dengan median jeda hanya 6 detik.
+### 12.1 Kluster 26: Narasi Nelayan dan Kredit Macet
+
+Kluster ini adalah yang paling kuat di dashboard Non-RT, dengan 13 akun yang seluruhnya saling terhubung satu sama lain (density = 1,000).
 
 | Metrik | Nilai |
 |---|---:|
 | Akun | 13 |
-| Density | 1.0000 |
-| Skor | 3.8074 |
+| Density | 1,000 |
+| Skor koordinasi | 3,807 |
 | Evidence | 78 |
-| Semantic edge | 78 |
-| Avg similarity | 1.000 |
+| Avg similarity | 1,000 |
 | Median jeda | 6 detik |
-| Status | Koordinasi Kuat |
 
-Beberapa akun sentral dalam kluster ini adalah `ow1b0v562dkee04`, `anoodyhh123`, `3zvaec23mmg78p3`, `lis_dua23640`, dan `9r28488u96dhe41`. Contoh narasinya berbunyi: "Nelayan tak bisa sendiri melawan kredit macet..."
+Contoh narasi yang muncul: *"Nelayan tak bisa sendiri melawan kredit macet..."*
 
-Bukti pasangan menunjukkan beberapa akun mengunggah teks dengan similarity 1.000 pada detik yang sama.
+Beberapa pasangan akun mengunggah teks dengan kemiripan sempurna (1,000) pada detik yang sama:
 
-| Pasangan Akun | Similarity | Jeda | Bukti |
-|---|---:|---:|---:|
-| `3zvaec23mmg78p3` - `lis_dua23640` | 1.000 | 0 detik | 1 |
-| `9r28488u96dhe41` - `BaisCharpe69286` | 1.000 | 0 detik | 1 |
-| `ow1b0v562dkee04` - `anoodyhh123` | 1.000 | 0 detik | 1 |
+| Pasangan Akun | Similarity | Jeda |
+|---|---:|---:|
+| `3zvaec23mmg78p3` — `lis_dua23640` | 1,000 | 0 detik |
+| `9r28488u96dhe41` — `BaisCharpe69286` | 1,000 | 0 detik |
+| `ow1b0v562dkee04` — `anoodyhh123` | 1,000 | 0 detik |
 
-Kluster ini menjadi kuat karena semua akun saling terhubung, teksnya identik atau hampir identik, dan waktu unggahnya sangat dekat. Karena ini dashboard Non-RT, kesamaan tersebut bukan berasal dari retweet sumber yang sama.
+**Interpretasi:** Terdapat pola penyebaran narasi non-retweet yang sangat seragam pada topik nelayan dan kredit macet, dalam rentang waktu yang sangat singkat. Narasi ini secara konsisten menyertakan framing yang mengaitkan isu dengan Ganjar-Mahfud.
 
-Interpretasi aman: terdapat pola penyebaran narasi non-retweet yang sangat seragam tentang nelayan, kredit macet, dan Ganjar-Mahfud dalam waktu sangat dekat.
+---
 
-### 14.2 Cluster 25: Narasi Kekerasan Seksual dan Lembaga Pendidikan
-
-Cluster 25 berisi 8 akun dengan density 1.0000, skor 3.1699, dan 28 evidence. Rata-rata similarity-nya 1.000, dengan median jeda 9 detik.
+### 12.2 Kluster 25: Narasi Legislasi dan Kekerasan Seksual
 
 | Metrik | Nilai |
 |---|---:|
 | Akun | 8 |
-| Density | 1.0000 |
-| Skor | 3.1699 |
+| Density | 1,000 |
+| Skor koordinasi | 3,170 |
 | Evidence | 28 |
-| Avg similarity | 1.000 |
+| Avg similarity | 1,000 |
 | Median jeda | 9 detik |
-| Status | Koordinasi Kuat |
 
-Akun yang muncul antara lain `DavidCo04395172`, `LoganWalke93437`, `NicholasRo77225`, `DylanYoung42780`, dan `EdwardBroo52343`. Contoh narasinya membahas legislasi, kekerasan seksual, lembaga pendidikan, dan penyebutan Ganjar-Mahfud.
+Narasi yang muncul membahas legislasi, kekerasan seksual, dan peran lembaga pendidikan, dengan penyebutan Ganjar-Mahfud. Beberapa pasangan akun mengunggah teks identik dalam selisih 0–1 detik.
 
-| Pasangan Akun | Similarity | Jeda | Bukti |
-|---|---:|---:|---:|
-| `EdwardBroo52343` - `PeterCa03670533` | 1.000 | 0 detik | 1 |
-| `DavidCo04395172` - `LoganWalke93437` | 1.000 | 0 detik | 1 |
-| `DylanYoung42780` - `NicholasRo77225` | 1.000 | 1 detik | 1 |
+**Interpretasi:** Terdapat pola penyebaran narasi non-retweet yang sangat seragam pada topik legislasi dan kekerasan seksual dalam waktu sangat berdekatan.
 
-Pola utamanya jelas: teks sangat identik, waktu unggah sangat dekat, dan hubungan antarakun sangat padat. Interpretasi aman: ada penyebaran teks non-RT yang sangat seragam pada topik legislasi dan kekerasan seksual, dengan fokus penyebutan Ganjar-Mahfud.
+---
 
-### 14.3 Cluster 35: Narasi Penyuluhan dan Desa
-
-Cluster 35 berisi 7 akun dengan density 1.0000, skor 3.0000, dan 21 evidence. Rata-rata similarity-nya 1.000, dengan median jeda hanya 1 detik.
+### 12.3 Kluster 35: Narasi Penyuluhan dan Desa
 
 | Metrik | Nilai |
 |---|---:|
 | Akun | 7 |
-| Density | 1.0000 |
-| Skor | 3.0000 |
+| Density | 1,000 |
+| Skor koordinasi | 3,000 |
 | Evidence | 21 |
-| Avg similarity | 1.000 |
-| Median jeda | 1 detik |
-| Status | Koordinasi Kuat |
+| Avg similarity | 1,000 |
+| Median jeda | **1 detik** |
 
-Akun yang muncul antara lain `kyton83321444`, `mbsqt84444943`, `hcybl92984327`, `nozit66263479`, dan `jttts84589488`. Contoh narasinya adalah: "Ganjar Pranowo Mahfud MD menyoroti pentingnya penyuluhan..."
+Contoh narasi: *"Ganjar Pranowo Mahfud MD menyoroti pentingnya penyuluhan di desa..."*
 
-| Pasangan Akun | Similarity | Jeda | Bukti |
-|---|---:|---:|---:|
-| `kyton83321444` - `mbsqt84444943` | 1.000 | 0 detik | 1 |
-| `nozit66263479` - `hcybl92984327` | 1.000 | 0 detik | 1 |
-| `nozit66263479` - `jttts84589488` | 1.000 | 0 detik | 1 |
+Median jeda 1 detik pada kluster ini adalah angka yang sangat kecil. Tujuh akun yang berbeda mengunggah teks identik dengan jeda rata-rata hanya satu detik—menunjukkan tingkat sinkronisasi yang sangat tinggi.
 
-Kluster ini sangat kuat karena teksnya identik, jeda waktunya hampir bersamaan, dan semua akun saling terhubung. Interpretasi aman: terdapat penyebaran narasi non-RT yang sangat seragam tentang penyuluhan dan desa, dengan fokus penyebutan Ganjar-Mahfud.
+**Interpretasi:** Terdapat pola penyebaran narasi yang sangat seragam dan hampir simultan pada topik penyuluhan desa.
 
-### 14.4 Cluster 63: Narasi Kesehatan Mental dan Puskesmas
+---
 
-Cluster 63 sedikit berbeda dari tiga kluster sebelumnya. Kluster ini lebih besar, berisi 17 akun, dengan density 0.6912, skor 2.8822, dan 94 evidence. Rata-rata similarity-nya 0.915, dengan median jeda 4 detik.
+### 12.4 Kluster 63: Narasi Kesehatan Mental dan Puskesmas
+
+Kluster ini memiliki profil yang sedikit berbeda: lebih besar, density tidak sempurna, dan variasi teks yang lebih luas.
 
 | Metrik | Nilai |
 |---|---:|
 | Akun | 17 |
-| Density | 0.6912 |
-| Skor | 2.8822 |
+| Density | 0,691 |
+| Skor koordinasi | 2,882 |
 | Evidence | 94 |
-| Avg similarity | 0.915 |
+| Avg similarity | 0,915 |
 | Median jeda | 4 detik |
-| Status | Koordinasi Kuat |
 
-Akun sentral yang muncul antara lain `mitchell_j70489`, `bawerman68390`, `EBarringto16155`, `chandter4855`, dan `dwptr27963469`. Narasinya berkaitan dengan kesehatan mental dan penempatan psikolog di puskesmas.
+Narasi berpusat pada tema kesehatan mental dan penempatan psikolog di puskesmas. Meskipun tidak semua teks identik, rata-rata similarity 0,915 menunjukkan bahwa inti narasi tetap sangat dekat. Kluster ini adalah yang terbesar di dashboard Non-RT (17 akun) dan juga memiliki jumlah evidence terbanyak (94 pasang bukti).
 
-| Pasangan Akun | Similarity | Jeda | Bukti |
+**Interpretasi:** Terdapat pola penyebaran narasi non-retweet yang kuat pada topik kesehatan mental, dengan kombinasi teks sangat mirip dan waktu unggah yang sangat berdekatan.
+
+---
+
+### 12.5 Kluster 29 dan 34: Narasi Kredit Perbankan untuk Koperasi dan UMKM
+
+Dua kluster ini sama-sama membahas program kredit perbankan, dengan narasi yang sedikit berbeda satu sama lain.
+
+**Kluster 29** — keyword: koperasi, kredit, kesejahteraan. Akun-akunnya: `gmonoona137`, `gmonoona82`, `gmonoona61`, `gmonoona138`, `gmonoona75`. Contoh narasi:
+
+> *"Terimakasih. Program Capres Ganjar Pranowo dan Cawapres Mahfud MD persembahkan 35% kredit perbankan..."*
+
+**Kluster 34** — keyword: UMKM, perbankan, tancap gas. Akun-akunnya: `gmonoona140`, `gmonoona143`, `Gmonoona163`, `Gmonoona160`, `gmonoona145`. Contoh narasi:
+
+> *"Wow, luar biasa. Program Capres Ganjar Pranowo dan Cawapres Mahfud MD tancap gas, 35% kredit perbankan..."*
+
+Dua hal menarik dari kedua kluster ini. Pertama, **pola nama akun**: seluruh akun menggunakan format `gmonoona + angka`, yang merupakan pola penamaan yang sangat seragam dan tidak lazim secara organik. Kedua, seluruh edge yang terbentuk adalah edge semantic—artinya, ini bukan retweet, melainkan tweet yang ditulis sebagai unggahan mandiri dengan isi yang sangat mirip.
+
+**Interpretasi:** Terdapat pola penyebaran narasi non-retweet yang sangat seragam pada topik kredit perbankan untuk koperasi dan UMKM, dari akun-akun dengan pola penamaan yang serupa.
+
+---
+
+## 13. Perbedaan Pola Antarkuery
+
+Salah satu temuan menarik dalam dataset ini adalah **perbedaan komposisi aktivitas** antarquery yang cukup mencolok:
+
+| Query | Retweet | Koneksi Semantic (Non-RT) | Karakteristik Dominan |
+|---|---:|---:|---|
+| `anies` | 302 (dominan) | sangat sedikit | Amplifikasi via retweet dari sumber tunggal |
+| `prabowo` | 227 | ~150 | Campuran retweet dan narasi non-RT |
+| `ganjar` | 34 (sangat sedikit) | **~2.042** (dominan) | Narasi non-retweet yang sangat seragam |
+
+Query `ganjar` menunjukkan pola yang paling berbeda: jumlah retweet sangat rendah, tetapi koneksi semantic sangat banyak—rasionya mencapai sekitar 60 banding 1. Ini bukan berarti query `ganjar` "lebih mencurigakan" dari yang lain; ini mencerminkan **gaya penyebaran yang berbeda** dalam dataset. Bisa jadi karena kelompok pendukung Ganjar lebih menghindari retweet langsung dan memilih mengunggah variasi teks, bisa juga karena faktor lain yang tidak dapat diverifikasi dari data ini saja.
+
+Yang perlu ditekankan: **perbedaan gaya ini tidak menunjukkan identitas atau motif pelaku**—hanya menunjukkan pola perilaku yang teramati di data.
+
+---
+
+## 14. Mengapa Akun Dapat Masuk ke Dalam Kluster?
+
+Satu akun tidak masuk kluster hanya karena menyebutkan nama kandidat tertentu. Akun masuk kluster karena memiliki hubungan matematis dengan akun lain berdasarkan:
+
+1. **Kemiripan teks** (cosine similarity ≥ 0,65 untuk edge semantic)
+2. **Kedekatan waktu** (jeda ≤ 1.800 detik)
+3. **Status tweet** (bukan retweet, untuk dashboard Non-RT)
+4. **Lolos filter backbone** (similarity rata-rata ≥ 0,75 dan jeda minimum ≤ 300 detik)
+
+Dasar pengelompokan adalah **hubungan matematis antara isi teks dan waktu unggah**, bukan label politik atau identitas akun.
+
+---
+
+## 15. Profil Akun: Karakteristik Demografis dalam Dataset
+
+Selain pola relasi antarakun, data yang tersedia juga memuat atribut akun seperti jumlah pengikut (*followers*), jumlah akun yang diikuti (*friends*), jumlah total tweet yang pernah diunggah (*statuses*), dan tanggal pembuatan akun. Analisis terhadap atribut-atribut ini menghasilkan beberapa temuan yang relevan.
+
+### 15.1 Distribusi Jumlah Pengikut
+
+Dari 584 akun unik dalam dataset, distribusi jumlah pengikut sangat tidak merata:
+
+| Kategori | Jumlah Akun | Persentase |
+|---|---:|---:|
+| Followers = 0 (tidak punya pengikut sama sekali) | 139 | 23,8% |
+| Followers ≤ 5 | 213 | 36,5% |
+| Followers ≤ 50 | 349 | 59,8% |
+| Followers > 1.000 | 61 | 10,4% |
+
+Nilai **median followers seluruh dataset hanya 24**, jauh di bawah nilai rata-rata (35.744) yang terdistorsi oleh sejumlah kecil akun dengan pengikut sangat banyak—seperti `tvOneNews` (9,8 juta), `VIVAcoid` (4,7 juta), dan `CNNIndonesia` (4 juta). Kehadiran akun-akun media besar ini bersama dengan ratusan akun berpengaruh sangat rendah menghasilkan distribusi yang sangat miring ke kanan (*heavily right-skewed*).
+
+Jika dilihat per query kandidat, perbedaan profil pengikut terlihat jelas:
+
+| Query | Median Followers | Keterangan |
+|---|---:|---|
+| `anies` | 140 | Relatif lebih tinggi |
+| `prabowo` | 77 | Menengah; ada akun media besar |
+| `ganjar` | **0** | Mayoritas akun tanpa pengikut |
+
+Query `ganjar` memiliki median followers **nol**—artinya lebih dari separuh akun yang muncul pada query ini tidak memiliki pengikut sama sekali. Ini konsisten dengan temuan sebelumnya bahwa koneksi semantic (non-retweet) paling banyak terbentuk pada query `ganjar`, karena akun dengan profil sangat minim cenderung tidak memiliki jejaring organik yang terbentuk secara alami.
+
+Perlu ditekankan bahwa jumlah followers rendah tidak serta-merta menunjukkan akun tidak otentik. Ada banyak pengguna aktif yang memang memilih untuk tidak membangun audiens. Namun, ketika dikombinasikan dengan pola unggahan yang sangat seragam dalam waktu sangat singkat, profil followers rendah ini menjadi konteks yang relevan.
+
+### 15.2 Akun dengan Koneksi Terbanyak di Graf
+
+Akun-akun yang paling banyak terhubung di dalam graf (degree tertinggi) umumnya juga memiliki profil pengikut yang sangat rendah:
+
+| Akun | Degree (koneksi) | Followers | Total Statuses |
 |---|---:|---:|---:|
-| `mitchell_j70489` - `bawerman68390` | 1.000 | 3 detik | 1 |
-| `chandter4855` - `EBarringto16155` | 1.000 | 3 detik | 1 |
-| `bawerman68390` - `EBarringto16155` | 1.000 | 5 detik | 1 |
+| `AsdasdasOpopop` | 54 | 0 | 3.125 |
+| `manilyn37` | 54 | 0 | 3.155 |
+| `Fatien_Epiey` | 54 | 0 | 3.186 |
+| `RusherALanuzga1` | 47 | 1 | 2.801 |
+| `AlbiPutz75864` | 47 | 1 | 2.228 |
+| `JZariell` | 47 | 0 | 3.250 |
+| `saudiboi28` | 47 | 0 | 3.256 |
+| `Gmonoona167` | 42 | 0 | 2.125 |
 
-Tidak semua teks dalam kluster ini benar-benar identik, tetapi rata-rata similarity 0.915 menunjukkan bahwa inti narasinya sangat dekat. Ukurannya juga lebih besar dibanding beberapa kluster lain, dan median jedanya hanya 4 detik. Interpretasi aman: ini adalah kluster non-RT yang kuat tentang kesehatan mental dan penempatan psikolog di puskesmas, dengan kombinasi teks sangat mirip dan waktu unggah yang sangat berdekatan.
+Akun-akun ini memiliki ribuan total status (riwayat unggahan lama), tetapi hampir tanpa pengikut—sebuah kombinasi yang tidak lazim untuk akun yang memang digunakan secara aktif dalam percakapan sosial organik. Pola ini layak dicatat sebagai temuan deskriptif, meskipun penjelasan di baliknya membutuhkan verifikasi lebih lanjut.
 
-### 14.5 Cluster 17: Narasi Kebebasan Berpendapat
+### 15.3 Distribusi Tahun Pembuatan Akun
 
-Cluster 17 berisi 5 akun dengan density 1.0000, skor 2.5850, dan 10 evidence. Rata-rata similarity-nya 1.000, dengan median jeda 13 detik.
+Sebaran tahun pembuatan akun menunjukkan adanya konsentrasi akun yang relatif baru:
 
-| Metrik | Nilai |
+| Periode | Jumlah Akun | Persentase |
+|---|---:|---:|
+| Sebelum 2020 | 280 | 47,9% |
+| 2020–2021 | 78 | 13,4% |
+| **2022–2023** | **210** | **36,0%** |
+
+Sekitar **36% akun dalam dataset dibuat dalam dua tahun terakhir sebelum Pilpres 2024**. Akun-akun yang dibuat pada 2022–2023 memiliki median followers hanya **8**, dibandingkan median **44** untuk akun yang dibuat sebelum 2022. Selain itu, median total statuses akun baru (1.417) lebih rendah dari akun lama (3.074), yang masuk akal mengingat waktu akun berdiri lebih singkat.
+
+Temuan ini tidak berarti akun baru secara otomatis tidak otentik—banyak pengguna yang memang baru bergabung menjelang Pilpres karena tertarik isu politik. Namun, kombinasi antara akun baru, followers sangat sedikit, dan pola unggahan yang sangat seragam merupakan konteks yang perlu diperhatikan dalam analisis lanjutan.
+
+---
+
+## 16. Pola Temporal: Distribusi Aktivitas Posting
+
+Seluruh 1.002 tweet dalam dataset berada dalam rentang waktu sekitar 21 menit. Distribusi aktivitas per menit menunjukkan pola yang tidak merata:
+
+| Waktu (UTC) | Jumlah Tweet | Proporsi |
+|---|---:|---:|
+| 17:59 | 1 | 0,1% |
+| 18:00 | 78 | 7,8% |
+| 18:01 | 87 | 8,7% |
+| 18:02 | 96 | 9,6% |
+| **18:03** | **221** | **22,1%** |
+| 18:04 | 70 | 7,0% |
+| 18:05 | 58 | 5,8% |
+| 18:06 | 46 | 4,6% |
+| 18:07 | 37 | 3,7% |
+| 18:08 | 47 | 4,7% |
+| 18:09 | 57 | 5,7% |
+| 18:10–18:21 | 204 | 20,4% |
+
+Temuan yang paling menonjol adalah **lonjakan aktivitas pada pukul 18:03 UTC**, di mana 221 tweet—setara 22,1% dari seluruh dataset—diunggah dalam satu menit. Ini adalah 2,3 kali lipat volume menit sebelumnya (96 tweet), dan langsung diikuti penurunan tajam ke 70 tweet pada menit berikutnya.
+
+Pola ini—lonjakan mendadak lalu turun cepat—berbeda dari pola pertumbuhan organik yang biasanya meningkat secara bertahap. Dalam literatur analisis media sosial, pola seperti ini sering dikaitkan dengan unggahan terjadwal atau koordinasi yang terpusat pada satu titik waktu tertentu. Namun, tanpa data lebih lanjut tentang komposisi tweet pada menit tersebut, interpretasi ini tetap bersifat deskriptif.
+
+Perlu dicatat bahwa lonjakan ini kemungkinan berhubungan dengan waktu di mana pipeline crawling mengambil data—sehingga konsentrasi tweet pada 18:03 bisa jadi juga mencerminkan batas snapshot pengambilan data, bukan semata perilaku posting pengguna.
+
+---
+
+## 17. Akun yang Aktif di Lebih dari Satu Query Kandidat
+
+Dari 584 akun unik, sebagian besar (532 akun, 91,1%) hanya muncul pada satu query kandidat. Namun, **52 akun (8,9%) muncul pada dua query atau lebih**, dan 5 di antaranya muncul pada ketiga query sekaligus (`anies`, `ganjar`, `prabowo`):
+
+| Akun | Query yang Diikuti | Tipe Tweet |
+|---|---|---|
+| `HalimWajib98317` | anies, ganjar, prabowo | Retweet di semua query |
+| `kufar14` | anies, ganjar, prabowo | Retweet di semua query |
+| `lilymrpng` | anies, ganjar, prabowo | Retweet di semua query |
+| `rahmatknt270201` | anies, ganjar, prabowo | Retweet di semua query |
+| `wongkalibanteng` | anies, ganjar, prabowo | Retweet di semua query |
+
+Seluruh akun yang muncul di ketiga query melakukan **retweet** di semua kubu—bukan menulis narasi orisinal. Ini bisa berarti beberapa hal: akun tersebut memang mengikuti percakapan dari semua kandidat, atau akun tersebut aktif me-retweet konten dari berbagai sumber tanpa afiliasi tunggal.
+
+Satu perbedaan menarik terlihat pada perbandingan profil followers:
+
+| Kelompok | Median Followers |
 |---|---:|
-| Akun | 5 |
-| Density | 1.0000 |
-| Skor | 2.5850 |
-| Evidence | 10 |
-| Avg similarity | 1.000 |
-| Median jeda | 13 detik |
-| Status | Koordinasi Kuat |
+| Akun yang hanya muncul di 1 query | 17 |
+| Akun yang muncul di 2+ query | 112 |
 
-Akun yang muncul antara lain `pywih49433791`, `akodc32817493`, `wcqdi86596419`, `vftza83414785`, dan `uoudw11445115`. Contoh narasinya membahas pemimpin, kepentingan rakyat, dan kebebasan berpendapat.
+Akun lintas query memiliki median followers **6,6 kali lebih tinggi** dibanding akun yang hanya aktif pada satu kubu. Ini mengindikasikan bahwa akun lintas query cenderung memiliki jaringan sosial yang lebih luas dan mungkin lebih aktif secara umum—bukan akun dengan profil minim yang hanya muncul untuk satu narasi tertentu.
 
-| Pasangan Akun | Similarity | Jeda | Bukti |
-|---|---:|---:|---:|
-| `wcqdi86596419` - `akodc32817493` | 1.000 | 0 detik | 1 |
-| `wcqdi86596419` - `pywih49433791` | 1.000 | 3 detik | 1 |
-| `pywih49433791` - `akodc32817493` | 1.000 | 3 detik | 1 |
+Temuan ini menambahkan nuansa pada gambaran keseluruhan: tidak semua aktivitas di dataset dapat langsung dikaitkan dengan satu kubu politik tertentu. Sebagian akun bergerak lintas kubu, dan pola ini layak diperhatikan dalam analisis yang lebih dalam.
 
-Kluster ini kecil, tetapi sangat padat. Interpretasi aman: terdapat pola teks non-RT yang identik atau hampir identik tentang kepentingan rakyat dan kebebasan berpendapat.
+---
 
-### 14.6 Cluster 29 dan 34: Narasi Kredit Perbankan untuk Koperasi/UMKM
+## 18. Interpretasi Umum Hasil
 
-Cluster 29 dan 34 sama-sama membahas program kredit perbankan untuk koperasi atau UMKM. Keduanya berisi 5 akun, memiliki density 1.0000, evidence 10, average similarity 1.000, dan median jeda yang sangat pendek.
+Berdasarkan seluruh analisis yang telah dilakukan—mulai dari struktur graf, pola kluster, profil akun, distribusi temporal, hingga akun lintas query—beberapa poin utama dapat ditarik:
 
-Cluster 29 memiliki median jeda 11 detik dengan keyword `cawapres`, `kesejahteraan`, dan `kredit`. Akun-akunnya adalah `gmonoona137`, `gmonoona82`, `gmonoona61`, `gmonoona138`, dan `gmonoona75`. Contoh narasinya:
+**1. Proporsi retweet yang tinggi membutuhkan pemisahan yang cermat.**
+Dataset secara keseluruhan memiliki rasio retweet 56,2%. Pemisahan retweet dari koordinasi semantic menjadi langkah penting agar hasil tidak terdistorsi oleh konten yang secara otomatis identik. Dashboard Non-RT menyediakan pandangan yang lebih bersih untuk keperluan ini.
 
-```text
-Terimakasih. Program Capres Ganjar Pranowo dan Cawapres Mahfud MD persembahkan 35% kredit perbankan...
-```
+**2. Koordinasi narasi non-retweet paling menonjol pada query Ganjar-Mahfud.**
+Setelah retweet dipisahkan, pola semantic coordination yang paling kuat secara konsisten muncul pada topik-topik yang berkaitan dengan Ganjar-Mahfud—meliputi nelayan dan kredit macet, legislasi dan kekerasan seksual, penyuluhan desa, kesehatan mental dan puskesmas, serta kredit perbankan untuk koperasi dan UMKM.
 
-Cluster 34 memiliki median jeda 17 detik dengan keyword `tancap`, `gas`, dan `perbankan`. Akun-akunnya adalah `gmonoona140`, `gmonoona143`, `Gmonoona163`, `Gmonoona160`, dan `gmonoona145`. Contoh narasinya:
+**3. Banyak kluster menunjukkan kemiripan teks yang sangat tinggi dalam waktu sangat singkat.**
+Kluster dengan similarity 1,000 dan median jeda beberapa detik menunjukkan bahwa sejumlah akun mengunggah narasi yang sama atau hampir identik dalam waktu yang hampir bersamaan. Pola seperti ini sulit dijelaskan sebagai kebetulan, meskipun penjelasan pastinya tetap di luar jangkauan analisis ini.
 
-```text
-Wow, luar biasa. Program Capres Ganjar Pranowo dan Cawapres Mahfud MD tancap gas, 35% kredit perbankan...
-```
+**4. Profil akun yang terlibat cenderung memiliki pengikut sangat sedikit.**
+Akun-akun dengan koneksi terbanyak di graf umumnya memiliki 0–1 followers. Query `ganjar`—yang paling banyak menghasilkan koneksi semantic—memiliki median followers nol. Pola ini relevan sebagai konteks, meski tidak dapat dijadikan bukti tunggal tentang sifat akun.
 
-Kedua kluster ini menarik karena akun-akunnya memiliki pola nama yang mirip, yaitu `gmonoona...`, dan rasio RT pada card Non-RT bernilai 0.00. Artinya, kluster terbentuk dari tweet non-retweet yang sangat mirip, bukan dari retweet. Interpretasi aman: ada pola penyebaran narasi non-RT yang sangat seragam pada topik kredit perbankan, koperasi, dan UMKM.
+**5. Ada lonjakan temporal yang mencolok pada menit 18:03 UTC.**
+Sebesar 22,1% dari seluruh tweet dalam dataset diunggah dalam satu menit, dengan volume 2,3 kali lipat menit sebelumnya. Pola ini berbeda dari pertumbuhan organik yang gradual, meskipun interpretasinya membutuhkan kehati-hatian mengingat keterbatasan data.
 
-## 15. Mengapa Akun Bisa Masuk ke Dalam Kluster?
+**6. Keterbatasan interpretasi harus diperhatikan.**
+Dataset ini hanya mencakup 1.002 tweet dalam rentang 21 menit—sampel yang sangat terbatas. Analisis ini tidak dapat membuktikan motif, identitas asli, afiliasi organisasi, atau apakah akun dioperasikan secara manual atau otomatis. Temuan paling tepat dipahami sebagai **indikasi awal berbasis data**, bukan sebagai kesimpulan final mengenai identitas atau niat pelaku.
 
-Satu akun tidak masuk kluster hanya karena menyebut nama kandidat tertentu. Akun masuk ke kluster karena memiliki edge dengan akun lain. Edge itu terbentuk ketika teksnya mirip secara embedding, waktu unggahnya dekat, akunnya berbeda, dan untuk dashboard Non-RT, tweet tersebut bukan retweet.
+---
 
-Untuk dashboard Non-RT, edge juga harus lolos backbone similarity dan waktu. Jadi, dasar pengelompokan bukan label politik akun, melainkan hubungan matematis antara isi teks dan waktu unggah.
+## 19. Kesimpulan
 
-Beberapa contoh penyebab kluster terbentuk:
+Secara metodologis, analisis ini memiliki beberapa kekuatan: retweet dipisahkan dari koordinasi semantic, setiap hubungan menyimpan bukti dan jenis relasi, kluster diberi label fokus narasi berdasarkan kata kunci, dan dashboard Non-RT menyediakan pandangan yang lebih bersih dari bias retweet. Analisis tambahan terhadap profil akun, distribusi temporal, dan akun lintas query memberikan lapisan konteks yang memperkaya pembacaan hasil.
 
-| Kluster | Penyebab Utama |
-|---|---|
-| 26 | Teks nelayan/kredit macet identik, jeda median 6 detik |
-| 25 | Teks legislasi/kekerasan seksual identik, jeda median 9 detik |
-| 35 | Teks penyuluhan/desa identik, jeda median 1 detik |
-| 63 | Narasi kesehatan mental sangat mirip, jeda median 4 detik |
-| 17 | Teks kepentingan rakyat/kebebasan berpendapat identik, jeda median 13 detik |
+Kesimpulan utama dari dataset ini dapat dirangkum sebagai berikut:
 
-Dengan cara baca seperti ini, analisis menjadi lebih hati-hati. Yang dibuktikan bukan "akun ini pendukung kandidat tertentu", melainkan "akun-akun ini memiliki pola unggahan yang sangat mirip dan muncul dalam waktu yang sangat dekat".
+> Pada dataset yang dianalisis, pola koordinasi narasi yang paling menonjol ditemukan pada konten non-retweet yang berkaitan dengan Ganjar-Mahfud, terutama pada topik nelayan/kredit macet, legislasi/kekerasan seksual, penyuluhan desa, kesehatan mental/puskesmas, dan kredit perbankan untuk koperasi/UMKM. Pola tersebut ditandai dengan banyak akun mengunggah teks yang sama atau sangat mirip dalam selisih waktu yang sangat singkat, dengan profil pengikut yang sangat rendah dan sebagian besar berasal dari akun yang dibuat dalam dua tahun terakhir sebelum Pilpres.
 
-## 16. Interpretasi Umum Hasil
-
-Temuan utama dari analisis ini adalah bahwa dataset memiliki proporsi retweet yang tinggi, terutama pada query `anies` dan `prabowo`. Karena itu, pemisahan retweet dari semantic coordination menjadi langkah penting agar hasil tidak bias oleh konten RT yang otomatis sama.
-
-Setelah retweet dipisahkan, masih terlihat banyak pola semantic coordination non-RT. Pada dashboard Non-RT, pola paling kuat dalam dataset ini dominan membahas Ganjar-Mahfud. Beberapa topik yang menonjol adalah nelayan dan kredit macet, legislasi dan kekerasan seksual, penyuluhan desa, kesehatan mental dan puskesmas, serta kredit perbankan untuk koperasi/UMKM.
-
-Banyak kluster kuat memiliki similarity 1.0 dan median jeda hanya beberapa detik. Ini menunjukkan adanya unggahan dengan teks yang sama atau sangat mirip dalam waktu yang hampir bersamaan. Namun, beberapa kluster berukuran kecil, sehingga walaupun kuat secara struktur internal, hasilnya tetap harus dibaca secara proporsional.
-
-Interpretasi yang aman adalah bahwa terdapat indikasi koordinasi narasi pada beberapa kelompok akun. Indikasi paling kuat terlihat ketika teks sangat mirip atau identik dan muncul hampir bersamaan. Dashboard Non-RT memperkuat pembacaan ini karena menunjukkan bahwa pola tersebut tidak hanya berasal dari retweet.
-
-Namun, ada beberapa hal yang tidak boleh disimpulkan dari data ini saja. Analisis ini tidak bisa membuktikan bahwa akun pasti bot, buzzer bayaran, atau pendukung resmi kandidat tertentu. Analisis ini juga tidak bisa dipakai untuk menyimpulkan opini publik secara keseluruhan, karena dataset hanya berisi 1002 tweet dalam rentang waktu sekitar 21 menit.
-
-## 17. Kesimpulan
-
-Secara metodologis, proyek ini sudah lebih kuat karena retweet dipisahkan dari semantic coordination, setiap edge menyimpan bukti dan jenis relasi, kluster diberi label fokus narasi, dan dashboard Non-RT menampilkan alasan kluster melalui similarity, waktu, density, serta contoh pasangan akun.
-
-Kesimpulan utama dari dataset ini adalah sebagai berikut:
-
-> Pada dataset yang dianalisis, pola koordinasi paling jelas muncul pada narasi non-retweet yang membahas Ganjar-Mahfud, terutama pada topik nelayan/kredit macet, legislasi/kekerasan seksual, penyuluhan/desa, kesehatan mental/puskesmas, dan kredit perbankan untuk koperasi/UMKM. Pola tersebut kuat karena banyak akun memposting teks yang sama atau sangat mirip dalam jeda waktu sangat pendek.
-
-Kesimpulan ini tetap memiliki batas. Dataset berukuran terbatas, rentang waktunya pendek, dan analisis ini membaca pola koordinasi graf, bukan motif, identitas asli, atau hubungan organisasi di balik akun. Karena itu, hasil paling tepat digunakan sebagai indikasi awal yang berbasis data, bukan sebagai vonis final terhadap akun atau kelompok tertentu.
+Kesimpulan ini memiliki batas yang jelas. Dataset berukuran terbatas, rentang waktunya sangat pendek, dan analisis ini hanya membaca pola koordinasi di tingkat graf—bukan motif, identitas asli, atau struktur organisasi di balik akun. Temuan ini paling tepat digunakan sebagai titik awal investigasi berbasis data, yang idealnya dilengkapi dengan data yang lebih besar, rentang waktu yang lebih panjang, dan metode verifikasi tambahan.
